@@ -1,0 +1,26 @@
+[
+  {
+    "orderId": "#12512B",
+    "orderDate": "May 5, 4:20 PM",
+    "customerName": "Tom Anderson",
+    "paymentStatus": "Paid",
+    "status": "Shipped",
+    "totalAmount": "$49.90"
+  },
+  {
+    "orderId": "#12523C",
+    "orderDate": "May 5, 4:15 PM",
+    "customerName": "Jayden Walker",
+    "paymentStatus": "Pending",
+    "status": "Delivered",
+    "totalAmount": "$34.36"
+  },
+  {
+    "orderId": "#51232A",
+    "orderDate": "May 5, 4:15 PM",
+    "customerName": "Inez Kim",
+    "paymentStatus": "Paid",
+    "status": "Pending",
+    "totalAmount": "$5.51"
+  }
+]

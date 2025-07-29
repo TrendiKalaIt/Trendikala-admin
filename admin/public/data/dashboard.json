@@ -1,0 +1,48 @@
+{
+  "totalRevenue": 10540,
+  "totalOrders": 1056,
+  "totalCustomers": 1000,
+  "totalProducts": 100,
+   "chartData": [
+    
+    { "label": "Mon", "orders": 200, "date": "2025-06-21T10:00:00Z" },
+    { "label": "Tue", "orders": 300, "date": "2025-07-22T11:00:00Z" },
+    { "label": "Wed", "orders": 10, "date": "2025-07-28T12:00:00Z" },
+    { "label": "Thu", "orders": 400, "date": "2025-07-31T13:00:00Z" },
+    { "label": "Fri", "orders": 500, "date": "2025-08-01T14:00:00Z" },
+    { "label": "Sat", "orders": 350, "date": "2025-08-02T15:00:00Z" },
+    { "label": "Sun", "orders": 420, "date": "2025-08-03T16:00:00Z" }
+  ],
+  "transactions": [
+    {
+      "name": "Jagarnath S.",
+      "date": "2025-07-29T01:30:00Z",
+      "amount": "$124.97",
+      "status": "Paid"
+    },
+    {
+      "name": "Anand G.",
+      "date": "2025-07-28T16:00:00Z",
+      "amount": "$55.42",
+      "status": "Pending"
+    },
+    {
+      "name": "Kartik S.",
+      "date": "2025-07-28T09:45:00Z",
+      "amount": "$89.90",
+      "status": "Paid"
+    },
+    {
+      "name": "Rakesh S.",
+      "date": "2025-07-27T22:10:00Z",
+      "amount": "$144.94",
+      "status": "Pending"
+    },
+    {
+      "name": "Anup S.",
+      "date": "2025-07-27T08:00:00Z",
+      "amount": "$70.52",
+      "status": "Paid"
+    }
+  ]
+}
