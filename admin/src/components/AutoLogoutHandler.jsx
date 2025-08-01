@@ -16,15 +16,15 @@ const AutoLogoutHandler = () => {
     // Auto logout after 30 minutes
     const timer = setTimeout(() => {
       logout();
-    }, 30 * 60 * 1000); // 30 minutes
+    }, 30 * 60 * 1000); 
 
-    // Check if page was refreshed (not a new tab or close)
+    
     const navigationEntries = performance.getEntriesByType("navigation");
     const isRefresh =
       navigationEntries.length > 0 &&
       navigationEntries[0].type === "reload";
 
-    // Only clear token on tab/browser close (not refresh)
+    
     const handleBeforeUnload = () => {
       if (!isRefresh) {
         localStorage.removeItem("token");

@@ -1,4 +1,3 @@
-// ✅ import React and Recharts as before
 import React, { useEffect, useState } from "react";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
@@ -21,14 +20,13 @@ const Dashboard = () => {
   const [selectedRange, setSelectedRange] = useState("Last 12 Hours");
   const [recentOrders, setRecentOrders] = useState([]);
   const [showCalendar, setShowCalendar] = useState(false);
-const [dateRange, setDateRange] = useState([
-  {
-    startDate: new Date(),
-    endDate: new Date(),
-    key: "selection",
-  },
-]);
-
+  const [dateRange, setDateRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   useEffect(() => {
     fetch("/data/dashboard.json")
@@ -54,46 +52,47 @@ const [dateRange, setDateRange] = useState([
   }, [allChartData, selectedRange]);
 
   const filterChartData = (range) => {
-  let fromTime;
-  let toTime = new Date();
+    let fromTime;
+    let toTime = new Date();
 
-  if (range === "Custom") {
-    fromTime = dateRange[0].startDate;
-    toTime = dateRange[0].endDate;
-  } else {
-    const now = new Date();
-    switch (range) {
-      case "This Week":
-        const day = now.getDay();
-        const diff = now.getDate() - day + (day === 0 ? -6 : 1);
-        fromTime = new Date(now.setDate(diff));
-        fromTime.setHours(0, 0, 0, 0);
-        break;
-      case "Last Month":
-        fromTime = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-        now.setHours(23, 59, 59, 999);
-        break;
-      case "Total Orders":
-        setFilteredChartData(allChartData);
-        return;
-      default:
-        fromTime = new Date(0);
+    if (range === "Custom") {
+      fromTime = dateRange[0].startDate;
+      toTime = dateRange[0].endDate;
+    } else {
+      const now = new Date();
+      switch (range) {
+        case "This Week":
+          const day = now.getDay();
+          const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+          fromTime = new Date(now.setDate(diff));
+          fromTime.setHours(0, 0, 0, 0);
+          break;
+        case "Last Month":
+          fromTime = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          now.setHours(23, 59, 59, 999);
+          break;
+        case "Total Orders":
+          setFilteredChartData(allChartData);
+          return;
+        default:
+          fromTime = new Date(0);
+      }
     }
-  }
 
-  const filtered = allChartData.filter((item) => {
-    return item.date >= fromTime && item.date <= toTime;
-  });
+    const filtered = allChartData.filter((item) => {
+      return item.date >= fromTime && item.date <= toTime;
+    });
 
-  setFilteredChartData(filtered);
-};
-
+    setFilteredChartData(filtered);
+  };
 
   if (!dashboardData) return <div className="p-4">Loading...</div>;
 
   return (
     <div className="p-4 space-y-6 bg-[#f5f9ef]">
-      <h1 className="text-2xl font-bold font-dashboard text-[#49951C]">Dashboard</h1>
+      <h1 className="text-2xl font-bold font-dashboard text-[#49951C]">
+        Dashboard
+      </h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -119,60 +118,59 @@ const [dateRange, setDateRange] = useState([
             Orders Over Time
           </h2>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
-  <div className="flex items-center gap-2">
-    <select
-      value={selectedRange}
-      onChange={(e) => {
-        const value = e.target.value;
-        setSelectedRange(value);
-        if (value !== "Custom") {
-          setShowCalendar(false);
-        }
-      }}
-      className="text-sm border border-gray-300 rounded px-2 py-1"
-    >
-      <option>This Week</option>
-      <option>Last Month</option>
-      <option>Total Orders</option>
-      <option>Custom</option>
-    </select>
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedRange}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setSelectedRange(value);
+                  if (value !== "Custom") {
+                    setShowCalendar(false);
+                  }
+                }}
+                className="text-sm border border-gray-300 rounded px-2 py-1"
+              >
+                <option>This Week</option>
+                <option>Last Month</option>
+                <option>Total Orders</option>
+                <option>Custom</option>
+              </select>
 
-    {selectedRange === "Custom" && (
-      <button
-        onClick={() => setShowCalendar(!showCalendar)}
-        className="text-sm text-[#49951C] underline"
-      >
-        {showCalendar ? "Hide Calendar" : "Select Dates"}
-      </button>
-    )}
-  </div>
+              {selectedRange === "Custom" && (
+                <button
+                  onClick={() => setShowCalendar(!showCalendar)}
+                  className="text-sm text-[#49951C] underline"
+                >
+                  {showCalendar ? "Hide Calendar" : "Select Dates"}
+                </button>
+              )}
+            </div>
 
-  {selectedRange === "Custom" && showCalendar && (
-    <div className="z-50 bg-white p-2 rounded shadow-md">
-      <DateRange
-        editableDateInputs={true}
-        onChange={(item) => {
-          setDateRange([item.selection]);
-        }}
-        moveRangeOnFirstSelection={false}
-        ranges={dateRange}
-        maxDate={new Date()}
-      />
-      <div className="flex justify-end mt-2">
-        <button
-          className="bg-[#49951C] text-white text-sm px-3 py-1 rounded"
-          onClick={() => {
-            filterChartData("Custom");
-            setShowCalendar(false);
-          }}
-        >
-          Apply
-        </button>
-      </div>
-    </div>
-  )}
-</div>
-
+            {selectedRange === "Custom" && showCalendar && (
+              <div className="z-50 bg-white p-2 rounded shadow-md">
+                <DateRange
+                  editableDateInputs={true}
+                  onChange={(item) => {
+                    setDateRange([item.selection]);
+                  }}
+                  moveRangeOnFirstSelection={false}
+                  ranges={dateRange}
+                  maxDate={new Date()}
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    className="bg-[#49951C] text-white text-sm px-3 py-1 rounded"
+                    onClick={() => {
+                      filterChartData("Custom");
+                      setShowCalendar(false);
+                    }}
+                  >
+                    Apply
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="h-64">

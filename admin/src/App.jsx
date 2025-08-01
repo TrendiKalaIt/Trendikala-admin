@@ -7,7 +7,7 @@ import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
-import LoginPage from "./pages/LoginPage"; // Login page
+import LoginPage from "./pages/LoginPage"; 
 import PrivateRoute from "./components/PrivateRoute";
 import { UserProvider } from "./context/UserContext";
 import AutoLogoutHandler from "./components/AutoLogoutHandler";
