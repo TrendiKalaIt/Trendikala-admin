@@ -1,38 +1,74 @@
-const Order = require("../models/Order");
-const User = require("../models/User");
-const Product = require("../models/Product");
+// const Order = require('../models/Order');
+// const Product = require('../models/Product');
 
-const getDashboardStats = async (req, res) => {
+// exports.getDashboardRevenue = async (req, res) => {
+//     try {
+//       // 1. Total Revenue: All Paid Orders
+//       const paidAgg = await Order.aggregate([
+//         { $match: { paymentStatus: "Paid" } },
+//         { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
+//       ]);
+//       const totalRevenue = paidAgg[0]?.totalRevenue || 0;
+
+//       // 2. Expected Revenue: Unpaid + Not Cancelled
+//       const expectedAgg = await Order.aggregate([
+//         {
+//           $match: {
+//             paymentStatus: { $ne: "Paid" },
+//             orderStatus: { $ne: "Cancelled" }
+//           }
+//         },
+//         { $group: { _id: null, expectedRevenue: { $sum: "$totalAmount" } } }
+//       ]);
+//       const expectedRevenue = expectedAgg[0]?.expectedRevenue || 0;
+
+//       // 3. Total Orders
+//       const totalOrders = await Order.countDocuments();
+
+//       // 4. Total Products
+//       const totalProducts = await Product.countDocuments();
+
+//       res.status(200).json({ totalRevenue, expectedRevenue, totalOrders, totalProducts });
+//     } catch (error) {
+//       console.error("Dashboard revenue fetch error:", error);
+//       res.status(500).json({ message: "Server error" });
+//     }
+//   };
+
+
+
+
+const Order = require('../models/Order');
+const Product = require('../models/Product');
+
+exports.getDashboardRevenue = async (req, res) => {
   try {
+    // 1. Total Revenue: All Paid Orders
+    const paidAgg = await Order.aggregate([
+      { $match: { paymentStatus: "Paid" } },
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
+    ]);
+    const totalRevenue = paidAgg[0]?.totalRevenue || 0;
+
+    // 2. Expected Revenue: Unpaid + Not Cancelled
+    const expectedAgg = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: { $ne: "Paid" },
+          orderStatus: { $ne: "Cancelled" }
+        }
+      },
+      { $group: { _id: null, expectedRevenue: { $sum: "$totalAmount" } } }
+    ]);
+    const expectedRevenue = expectedAgg[0]?.expectedRevenue || 0;
+
+    // 3. Total Orders
     const totalOrders = await Order.countDocuments();
-   const totalRevenueAgg = await Order.aggregate([
-  { $match: { status: "paid" } },
-  { $group: { _id: null, total: { $sum: "$totalAmount" } } }
-]);
 
-     const expectedRevenueAgg = await Order.aggregate([
-  {
-    $match: {
-      status: "Processing",
-       paymentMethod: "cashOnDelivery",
-      orderStatus: { $in: ["pending", "shipped"] },
-    },
-  },
-  {
-    $group: {
-      _id: null,
-      total: { $sum: "$totalAmount" },
-    },
-  },
-]);
-
-
-    const totalRevenue = parseFloat((totalRevenueAgg[0]?.total || 0).toFixed(2));
-    const expectedRevenue = parseFloat((expectedRevenueAgg[0]?.total || 0).toFixed(2));
-
-    const totalCustomers = await User.countDocuments({}); 
+    // 4. Total Products
     const totalProducts = await Product.countDocuments();
 
+    // 5. Chart Data: Daily order count
     const chartData = await Order.aggregate([
       {
         $group: {
@@ -61,16 +97,14 @@ const getDashboardStats = async (req, res) => {
     ]);
 
     res.status(200).json({
-      totalOrders,
       totalRevenue,
-      totalCustomers,
+      expectedRevenue,
+      totalOrders,
       totalProducts,
       chartData,
-      expectedRevenue,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Failed to fetch dashboard stats" });
+  } catch (error) {
+    console.error("Dashboard revenue fetch error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
-module.exports = { getDashboardStats };
