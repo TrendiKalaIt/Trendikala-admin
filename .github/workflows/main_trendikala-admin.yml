@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# Docs for Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
+# Docs: https://github.com/Azure/webapps-deploy
 
 name: Build and deploy Node.js app to Azure Web App - Trendikala-admin
 
@@ -26,15 +23,16 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies, build, test
+      - name: Install dependencies and build
         run: |
           npm install
           npm run build --if-present
           npm run test --if-present
         working-directory: ./server
 
-      - name: Zip project
-        run: zip -r release.zip .
+      - name: Zip project contents (not parent folder)
+        run: |
+          zip -r release.zip ./*
         working-directory: ./server
 
       - name: Upload zip artifact
@@ -62,14 +60,13 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4199E1BB7EC147B2892C9F9CF738D7B1 }}
-           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_14582AB676BE4765B7B11B1867149912 }}
-           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_82F0F549374244258162B75890BCC1FC }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_4199E1BB7EC147B2892C9F9CF738D7B1 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_14582AB676BE4765B7B11B1867149912 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_82F0F549374244258162B75890BCC1FC }}
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Trendikala-admin'
           slot-name: 'Production'
           package: .
-
-          
