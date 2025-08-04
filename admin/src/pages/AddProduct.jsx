@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({

@@ -15,7 +15,7 @@ const Settings = () => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/profile`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
   headers: {
     Authorization: `Bearer ${token}`,
   },
@@ -42,7 +42,7 @@ useEffect(() => {
   const fetchAllAdmins = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -97,7 +97,7 @@ useEffect(() => {
 
   try {
     const token = localStorage.getItem("token");
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/profile`, {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

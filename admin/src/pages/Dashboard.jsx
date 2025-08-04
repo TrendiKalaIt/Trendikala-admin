@@ -29,60 +29,62 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-  const fetchDashboardData = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch("http://localhost:5000/api/dashboard", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await res.json();
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/dashboard`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    setDashboardData(data);
+        const data = await res.json();
 
-    const chartDataWithDates = (data.chartData || []).map((item) => ({
-      ...item,
-      date: new Date(item.date),
-    }));
-    setAllChartData(chartDataWithDates);
-  } catch (error) {
-    console.error("Error fetching dashboard data:", error);
-  }
-};
+        setDashboardData(data);
 
-
- const fetchRecentOrders = async () => {
-  try {
-    const token = localStorage.getItem("token"); 
-    const res = await fetch("http://localhost:5000/api/orders", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = await res.json();
-
-    // Adapt data to recentOrders format used in frontend
-    const formattedOrders = data.slice(0, 7).map((order) => ({
-      orderId: order.orderId,
-      orderDate: new Date(order.createdAt).toLocaleDateString("en-IN"),
-      customerName: order.shippingInfo.fullName,
-      totalAmount: `₹${order.totalAmount}`,
-      paymentStatus: order.paymentMethod === "Razorpay" ? "Paid" : "Pending",
-      status: order.orderStatus,
-    }));
-
-    setRecentOrders(formattedOrders);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-  }
-};
+        const chartDataWithDates = (data.chartData || []).map((item) => ({
+          ...item,
+          date: new Date(item.date),
+        }));
+        setAllChartData(chartDataWithDates);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    };
 
 
-  fetchDashboardData();
-  fetchRecentOrders();
-}, []);
+    const fetchRecentOrders = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/orders`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+
+        const data = await res.json();
+
+        // Adapt data to recentOrders format used in frontend
+        const formattedOrders = data.slice(0, 7).map((order) => ({
+          orderId: order.orderId,
+          orderDate: new Date(order.createdAt).toLocaleDateString("en-IN"),
+          customerName: order.shippingInfo.fullName,
+          totalAmount: `₹${order.totalAmount}`,
+          paymentStatus: order.paymentMethod === "Razorpay" ? "Paid" : "Pending",
+          status: order.orderStatus,
+        }));
+
+        setRecentOrders(formattedOrders);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+
+    fetchDashboardData();
+    fetchRecentOrders();
+  }, []);
 
 
   useEffect(() => {
@@ -291,26 +293,24 @@ const Dashboard = () => {
                   <td className="px-4 py-2">{order.totalAmount}</td>
                   <td className="px-4 py-2">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        order.paymentStatus === "Paid"
-                          ? "bg-green-100 text-green-600"
-                          : order.paymentStatus === "Pending"
+                      className={`px-2 py-1 rounded text-xs font-medium ${order.paymentStatus === "Paid"
+                        ? "bg-green-100 text-green-600"
+                        : order.paymentStatus === "Pending"
                           ? "bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-600"
-                      }`}
+                        }`}
                     >
                       {order.paymentStatus}
                     </span>
                   </td>
                   <td className="px-4 py-2">
                     <span
-                      className={`px-2 py-1 rounded text-xs font-medium ${
-                        order.status === "Delivered"
-                          ? "bg-green-100 text-green-600"
-                          : order.status === "Pending"
+                      className={`px-2 py-1 rounded text-xs font-medium ${order.status === "Delivered"
+                        ? "bg-green-100 text-green-600"
+                        : order.status === "Pending"
                           ? "bg-yellow-100 text-yellow-700"
                           : "bg-red-100 text-red-600"
-                      }`}
+                        }`}
                     >
                       {order.status}
                     </span>

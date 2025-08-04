@@ -47,7 +47,7 @@ const Orders = () => {
           return;
         }
 
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`, {
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/orders`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -91,7 +91,7 @@ const Orders = () => {
 
       // Step 2: Send update to backend
       await axios.put(
-        `${import.meta.env.VITE_API_URL}/api/orders/${orderId}/status`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}/status`,
         { orderStatus: value },
         {
           headers: {
@@ -124,7 +124,7 @@ const Orders = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/orders/${orderIdNumber}`,
+        `${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderIdNumber}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

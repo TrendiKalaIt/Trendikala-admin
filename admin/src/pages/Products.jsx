@@ -15,7 +15,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 // Use your API base URL from environment
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const ProductsPageContent = () => {
   const [products, setProducts] = useState([]);

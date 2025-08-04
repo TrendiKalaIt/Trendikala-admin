@@ -27,7 +27,7 @@ const CustomersPageContent = () => {
         }
 
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/users/all`,
+          `${import.meta.env.VITE_API_BASE_URL}/api/users/all`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
