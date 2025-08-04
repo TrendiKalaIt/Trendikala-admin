@@ -1,5 +1,4 @@
 
-
 import React, { useState, useMemo, useEffect } from "react";
 import axios from "axios";
 import {
@@ -9,35 +8,28 @@ import {
   Trash2,
   ArrowLeft,
   ArrowRight,
-  Check,
-  X,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-// Use your API base URL from environment
 const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const ProductsPageContent = () => {
   const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
-  const [editingProductId, setEditingProductId] = useState(null);
-  const [editedInventory, setEditedInventory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
-  // Fetch products from backend API on mount
   useEffect(() => {
     fetchProducts();
-    // eslint-disable-next-line
   }, []);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token'); // Or wherever your auth token is stored
+      const token = localStorage.getItem('token');
       const response = await axios.get(`${API_URL}/api/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -51,7 +43,6 @@ const ProductsPageContent = () => {
     setLoading(false);
   };
 
-
   const filteredProducts = useMemo(() => {
     return products.filter((product) =>
       product?.productName?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -59,13 +50,9 @@ const ProductsPageContent = () => {
   }, [products, searchTerm]);
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = filteredProducts.slice(
-    indexOfFirstProduct,
-    indexOfLastProduct
-  );
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -74,63 +61,17 @@ const ProductsPageContent = () => {
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
-      setEditingProductId(null);
     }
   };
 
   const handlePreviousPage = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));
-    setEditingProductId(null);
   };
 
   const handleNextPage = () => {
     setCurrentPage((prev) => Math.min(totalPages, prev + 1));
-    setEditingProductId(null);
   };
 
-  const handleEditInventoryClick = (product) => {
-    setEditingProductId(product._id || product.id);
-    setEditedInventory(String(product.stock));
-  };
-
-  const handleInventoryChange = (e) => {
-    const value = e.target.value;
-    if (/^\d*$/.test(value)) {
-      setEditedInventory(value);
-    }
-  };
-
-  const handleSaveInventory = async (productId) => {
-    const newInventoryValue = parseInt(editedInventory, 10);
-    if (isNaN(newInventoryValue) || newInventoryValue < 0) {
-      alert("Please enter a valid non-negative number for inventory.");
-      return;
-    }
-    try {
-      await axios.patch(`${API_URL}/api/products/inventory/${productId}`, {
-        inventory: newInventoryValue,
-      });
-      setProducts((prevProducts) =>
-        prevProducts.map((product) =>
-          (product._id || product.id) === productId
-            ? { ...product, inventory: newInventoryValue }
-            : product
-        )
-      );
-      setEditingProductId(null);
-      setEditedInventory("");
-    } catch (err) {
-      alert("Failed to update inventory.");
-      console.error(err);
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setEditingProductId(null);
-    setEditedInventory("");
-  };
-
-  // --- Delete Functionality ---
   const handleDeleteProduct = async (productId, productName) => {
     if (
       window.confirm(
@@ -138,7 +79,7 @@ const ProductsPageContent = () => {
       )
     ) {
       try {
-        const token = localStorage.getItem('token'); // Adjust if you store token under a different key
+        const token = localStorage.getItem('token');
         await axios.delete(`${API_URL}/api/products/${productId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -156,17 +97,12 @@ const ProductsPageContent = () => {
         } else if (updatedProducts.length === 0) {
           setCurrentPage(1);
         }
-
-        setEditingProductId(null);
-        toast.success(`"${productName}" deleted successfully.`);
       } catch (err) {
-        toast.error("Failed to delete product.");
+        alert("Failed to delete product.");
         console.error(err);
       }
     }
   };
-
-
 
   const handleAddProductClick = () => {
     navigate("/add-product");
@@ -196,16 +132,12 @@ const ProductsPageContent = () => {
         }
       } else {
         pageNumbers.push(1);
-        if (currentPage > 2 + 1) {
+        if (currentPage > 3) {
           pageNumbers.push("...");
         }
-        const startPage = currentPage - Math.floor((maxPageButtons - 5) / 2);
-        const endPage = currentPage + Math.floor((maxPageButtons - 5) / 2);
-        for (
-          let i = Math.max(2, startPage);
-          i <= Math.min(totalPages - 1, endPage);
-          i++
-        ) {
+        const startPage = currentPage - 1;
+        const endPage = currentPage + 1;
+        for (let i = startPage; i <= endPage; i++) {
           pageNumbers.push(i);
         }
         if (currentPage < totalPages - 2) {
@@ -233,16 +165,12 @@ const ProductsPageContent = () => {
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm text-gray-700"
             />
           </div>
-          <div className="flex gap-3">
-
-
-            <button
-              onClick={handleAddProductClick}
-              className="px-5 py-2.5 bg-green-500 text-white rounded-md text-sm font-medium flex items-center gap-2 hover:bg-green-600 transition-colors duration-200"
-            >
-              <Plus className="h-5 w-5 text-white" /> Add Product
-            </button>
-          </div>
+          <button
+            onClick={handleAddProductClick}
+            className="px-5 py-2.5 bg-green-500 text-white rounded-md text-sm font-medium flex items-center gap-2 hover:bg-green-600 transition-colors duration-200"
+          >
+            <Plus className="h-5 w-5 text-white" /> Add Product
+          </button>
         </div>
 
         {/* Product Table */}
@@ -250,27 +178,10 @@ const ProductsPageContent = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Product
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Inventory
-                </th>
-                <th
-                  scope="col"
-                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                >
-                  Price
-                </th>
-                <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Delete Action</span>
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Inventory</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -283,105 +194,46 @@ const ProductsPageContent = () => {
                   <tr key={product._id || product.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <img
-                            className="h-10 w-10 rounded-md object-cover border border-gray-200"
-                            src={
-                              product.media?.find((m) => m.type === "image")?.url ||
-                              "https://via.placeholder.com/40?text=No+Image"
-                            }
-                            alt={product.productName}
-                          />
-
-                        </div>
+                        <img
+                          className="h-10 w-10 rounded-md object-cover border border-gray-200"
+                          src={product.media?.find((m) => m.type === "image")?.url || "https://via.placeholder.com/40?text=No+Image"}
+                          alt={product.productName}
+                        />
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {product.productName}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {product.category}
-                          </div>
+                          <div className="text-sm font-medium text-gray-900">{product.productName}</div>
+                          <div className="text-xs text-gray-500">{product.category}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {editingProductId === (product._id || product.id) ? (
-                        <div className="flex items-center gap-1">
-                          <input
-                            type="text"
-                            value={editedInventory}
-                            onChange={handleInventoryChange}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter")
-                                handleSaveInventory(product._id || product.id);
-                              if (e.key === "Escape") handleCancelEdit();
-                            }}
-                            className="w-16 px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
-                          />
-                          <button
-                            onClick={() => handleSaveInventory(product._id || product.id)}
-                            className="p-1 text-green-600 hover:text-green-700 rounded-md transition-colors duration-200"
-                            title="Save"
-                          >
-                            <Check className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={handleCancelEdit}
-                            className="p-1 text-red-600 hover:text-red-700 rounded-md transition-colors duration-200"
-                            title="Cancel"
-                          >
-                            <X className="h-4 w-4" />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          {product.stock}
-                          {/* <button
-                            onClick={() => handleEditInventoryClick(product)}
-                            className="text-gray-500 hover:text-green-600 transition-colors duration-200"
-                            title="Edit Inventory"
-                          >
-                            <Edit className="h-4 w-4" />
-                          </button> */}
-                        </div>
-                      )}
+                    <td className="px-6 py-4 text-sm text-gray-700">
+                      {parseInt(product.stock)}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+                    <td className="px-6 py-4 text-sm text-gray-700">
                       ${product.price}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                    <td className="px-6 py-4 text-right text-sm font-medium">
                       <div className="flex justify-end gap-3">
                         <button
                           onClick={() => navigate(`/edit-product/${product._id || product.id}`)}
-                          className="text-gray-500 hover:text-green-600 transition-colors duration-200"
+                          className="text-gray-500 hover:text-green-600"
                           title="Edit Product"
-                          aria-label={`Edit product ${product.productName}`}
                         >
                           <Edit className="h-5 w-5" />
                         </button>
                         <button
-                          onClick={() =>
-                            handleDeleteProduct(product._id || product.id, product.productName)
-                          }
-                          className="text-gray-500 hover:text-red-600 transition-colors duration-200"
+                          onClick={() => handleDeleteProduct(product._id || product.id, product.productName)}
+                          className="text-gray-500 hover:text-red-600"
                           title="Delete Product"
-                          aria-label={`Delete product ${product.productName}`}
                         >
                           <Trash2 className="h-5 w-5" />
                         </button>
                       </div>
                     </td>
-
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td
-                    colSpan="4"
-                    className="px-6 py-4 text-center text-gray-500"
-                  >
-                    No products found.
-                  </td>
+                  <td colSpan="4" className="px-6 py-4 text-center text-gray-500">No products found.</td>
                 </tr>
               )}
             </tbody>
@@ -391,48 +243,20 @@ const ProductsPageContent = () => {
         {/* Pagination */}
         {totalPages > 0 && (
           <div className="flex justify-center items-center mt-8 space-x-2">
-            <button
-              onClick={handlePreviousPage}
-              disabled={currentPage === 1}
-              className={`p-2 rounded-md transition-colors duration-200 ${currentPage === 1
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-gray-500 hover:bg-gray-200"
-                }`}
-            >
+            <button onClick={handlePreviousPage} disabled={currentPage === 1} className={`p-2 rounded-md ${currentPage === 1 ? "text-gray-400 cursor-not-allowed" : "text-gray-500 hover:bg-gray-200"}`}>
               <ArrowLeft className="h-4 w-4" />
             </button>
-
             {getPageNumbers().map((pageNumber, index) =>
               pageNumber === "..." ? (
-                <span
-                  key={`ellipsis-${index}`}
-                  className="px-2 py-2 text-sm text-gray-500"
-                >
-                  ...
-                </span>
+                <span key={`ellipsis-${index}`} className="px-2 py-2 text-sm text-gray-500">...</span>
               ) : (
-                <button
-                  key={pageNumber}
-                  onClick={() => handlePageChange(pageNumber)}
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                                    ${currentPage === pageNumber
-                      ? "text-white bg-green-500 hover:bg-green-600"
-                      : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-100"
-                    }`}
-                >
+                <button key={pageNumber} onClick={() => handlePageChange(pageNumber)}
+                  className={`px-4 py-2 text-sm font-medium rounded-md ${currentPage === pageNumber ? "text-white bg-green-500 hover:bg-green-600" : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-100"}`}>
                   {pageNumber}
                 </button>
               )
             )}
-
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage === totalPages}
-              className={`p-2 rounded-md transition-colors duration-200 ${currentPage === totalPages
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-gray-500 hover:bg-gray-200"
-                }`}
-            >
+            <button onClick={handleNextPage} disabled={currentPage === totalPages} className={`p-2 rounded-md ${currentPage === totalPages ? "text-gray-400 cursor-not-allowed" : "text-gray-500 hover:bg-gray-200"}`}>
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
