@@ -36,30 +36,66 @@ const getOrderByOrderId = async (req, res) => {
 };
 
 // Update order status
+// const updateOrderStatus = async (req, res) => {
+//   try {
+//     const { orderId } = req.params;
+//     const { orderStatus } = req.body;
+
+//     const order = await Order.findOneAndUpdate(
+//       { orderId: orderId },
+//       { orderStatus: orderStatus },
+//       { new: true }
+//     );
+
+//     if (!order) {
+//       return res.status(404).json({ message: 'Order not found' });
+//     }
+//     if (order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled') {
+//       return res.status(400).json({ message: 'Cannot update a delivered or cancelled order' });
+//     }
+
+//     res.status(200).json({ message: 'Order status updated', order });
+//   } catch (error) {
+//     console.error('Error updating order status:', error.message);
+//     res.status(500).json({ message: 'Server error while updating order status' });
+//   }
+// };
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { orderStatus } = req.body;
 
-    const order = await Order.findOneAndUpdate(
-      { orderId: orderId },
-      { orderStatus: orderStatus },
-      { new: true }
-    );
-
-    if (!order) {
+    // Check if trying to update Delivered or Cancelled order again
+    const existingOrder = await Order.findOne({ orderId: orderId });
+    if (!existingOrder) {
       return res.status(404).json({ message: 'Order not found' });
     }
-    if (order.orderStatus === 'Delivered' || order.orderStatus === 'Cancelled') {
+    if (existingOrder.orderStatus === 'Delivered' || existingOrder.orderStatus === 'Cancelled') {
       return res.status(400).json({ message: 'Cannot update a delivered or cancelled order' });
     }
 
-    res.status(200).json({ message: 'Order status updated', order });
+    // Prepare update object
+    const updateFields = { orderStatus };
+
+    if (orderStatus === 'Delivered') {
+      updateFields.paymentStatus = 'Paid';
+    } else if (orderStatus === 'Cancelled') {
+      updateFields.paymentStatus = 'Failed';
+    }
+
+    const updatedOrder = await Order.findOneAndUpdate(
+      { orderId },
+      updateFields,
+      { new: true }
+    );
+
+    res.status(200).json({ message: 'Order status updated', order: updatedOrder });
   } catch (error) {
     console.error('Error updating order status:', error.message);
     res.status(500).json({ message: 'Server error while updating order status' });
   }
 };
+
 
 
 module.exports = {
