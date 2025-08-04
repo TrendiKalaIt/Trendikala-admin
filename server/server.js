@@ -25,6 +25,10 @@ app.use(cors({
   origin: '*'
 }));
 
+app.get('/', (req, res) => {
+  res.send('Trendikala Admin API is running');
+});
+
 
 app.use(express.json());
 
