@@ -27,7 +27,7 @@ jobs:
 
       - name: Set environment variables for admin frontend
         run: |
-          echo "REACT_APP_API_URL=https://your-backend-api-url-here" > admin/.env.production
+          echo "VITE_API_BASE_URL=https://trendikala-admin-acf6fadrfhd6gbd0.southeastasia-01.azurewebsites.net" > admin/.env.production
           # Add more env variables if needed, e.g.:
           # echo "REACT_APP_OTHER_VAR=${{ secrets.OTHER_SECRET }}" >> admin/.env.production
 
@@ -58,4 +58,5 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ASHY_BEACH_0DB5D601E }}
           action: "close"
+
 
