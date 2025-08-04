@@ -22,9 +22,9 @@ connectDB();
 
 //  Use cors middleware
 app.use(cors({
-  origin: 'http://localhost:5173',  // your frontend's origin
-  credentials: true                // if you send cookies or auth headers
+  origin: '*'
 }));
+
 
 app.use(express.json());
 
