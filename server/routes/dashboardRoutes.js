@@ -1,10 +1,3 @@
-// // 
-
-// const { getDashboardData } = require('../controllers/dashboardController');
-
-// // GET method for dashboard summary
-// router.get('/dashboard', getDashboardData);
-
 
 // routes/adminRoutes.js (ya jo bhi aapka admin route file ho)
 const express = require('express');
