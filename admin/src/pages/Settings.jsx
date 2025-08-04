@@ -8,55 +8,69 @@ const Settings = () => {
   const [formData, setFormData] = useState({});
 
 
-  const [image, setImage] = useState("");
-  const [newImageFile, setNewImageFile] = useState(null);
-  const [allUsers, setAllUsers] = useState([]); // for superadmin
+  
+  const [allUsers, setAllUsers] = useState([]); 
 
-  useEffect(() => {
+ useEffect(() => {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/profile`, {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 
+      const data = await res.json();
       if (res.ok) {
         setFormData({
-          name: data.name || "",
-          email: data.email || "",
+          name: data.name,
+          email: data.email,
           phone: data.phone || "",
-          role: data.role || "",
+          role: data.role,
         });
-        setImage(data.profileImage || "");
-      } else {
-        console.error("Failed to fetch profile:", data.message);
       }
     } catch (err) {
-      console.error("Error fetching profile:", err);
+      console.error("Failed to load profile:", err);
     }
   };
 
   fetchProfile();
 }, []);
 
-  
-  useEffect(() => {
-  const fetchUsers = async () => {
+useEffect(() => {
+  const fetchAllAdmins = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/user/users`)
-;
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = await res.json();
-      setAllUsers(data);
+      if (res.ok) {
+        setAllUsers(data);
+      } else {
+        console.error("Failed to fetch admin users:", data.message);
+      }
     } catch (err) {
-      console.error("Failed to fetch users:", err);
+      console.error("Error fetching admin users:", err);
     }
   };
 
-  if (formData.role === "superadmin") {
-    fetchUsers();
+  
+  if (formData?.role?.toLowerCase() === "superadmin") {
+    fetchAllAdmins();
   }
-}, [formData.role]);
+}, [formData.role]); 
+
+
+
+
+
+  
+
 
 
   const handleEditClick = (field) => setEditingField(field);
@@ -67,59 +81,57 @@ const Settings = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSave = () => {
-    if (editingField === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(formData.email)) {
-        alert("Invalid email format");
-        return;
-      }
-    }
-    if (editingField === "phone" && formData.phone.length !== 10) {
-      alert("Phone number must be exactly 10 digits");
+ const handleSave = async () => {
+  if (editingField === "email") {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      alert("Invalid email format");
       return;
     }
-    setEditingField(null);
-  };
+  }
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setNewImageFile(file);
-      const imgURL = URL.createObjectURL(file);
-      setImage(imgURL);
-    }
-  };
+  if (editingField === "phone" && formData.phone.length !== 10) {
+    alert("Phone number must be exactly 10 digits");
+    return;
+  }
 
-  const handleImageDelete = () => {
-    setImage("");
-    setNewImageFile(null);
-  };
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/profile`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+      }),
+    });
 
-  const handleImageSave = async () => {
-    if (!newImageFile) return alert("Please select an image to upload");
-
-    const formDataImage = new FormData();
-    formDataImage.append("profileImage", newImageFile);
-
-    try {
-      const res = await fetch("/api/upload-profile-image", {
-        method: "POST",
-        body: formDataImage,
+    const data = await res.json();
+    if (res.ok) {
+      setFormData({
+        name: data.name,
+        email: data.email,
+        phone: data.phone || "",
+        role: data.role,
       });
-
-      const data = await res.json();
-      if (res.ok) {
-        setImage(data.imageUrl);
-        alert("Image uploaded successfully");
-        setNewImageFile(null);
-      } else {
-        alert("Failed to upload image");
-      }
-    } catch (err) {
-      alert("Error uploading image");
+      alert("Profile updated successfully");
+    } else {
+      alert(data.message || "Failed to update profile");
     }
-  };
+  } catch (err) {
+    console.error("Error updating profile:", err);
+    alert("Something went wrong");
+  }
+
+  setEditingField(null);
+};
+
+
+  
 
   return (
     <div className="p-2 bg-[#f0f5eb] min-h-screen">
@@ -148,7 +160,7 @@ const Settings = () => {
                     : "text-gray-600 hover:text-[#3a4d39]"
                 }`}
               >
-                Manage Users
+               Users Details
               </button>
             )}
           </div>
@@ -160,39 +172,12 @@ const Settings = () => {
             <>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <img
-                    src={image || "https://via.placeholder.com/150"}
-                    alt="Profile"
-                    className="w-20 h-20 rounded-full border object-cover"
-                  />
-                  <div className="flex gap-2">
-                    <button
-                      className="p-2 bg-gray-100 rounded-full hover:bg-red-100"
-                      onClick={handleImageDelete}
-                    >
-                      <Trash2 size={18} className="text-red-600" />
-                    </button>
-                    <label className="p-2 bg-gray-100 rounded-full hover:bg-green-100 cursor-pointer">
-                      <Upload size={18} className="text-green-600" />
-                      <input
-                        type="file"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={handleImageUpload}
-                      />
-                    </label>
-                  </div>
+                  <h2>User Profile</h2>
+                  
                 </div>
               </div>
 
-              {newImageFile && (
-                <button
-                  onClick={handleImageSave}
-                  className="mb-4 px-4 py-2 bg-[#3a4d39] text-white rounded hover:bg-[#2f3d2d]"
-                >
-                  Save Image
-                </button>
-              )}
+             
 
               <div className="space-y-6">
                 {[

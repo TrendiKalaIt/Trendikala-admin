@@ -1,9 +1,33 @@
-const express = require('express');
-const router = express.Router();
-const { protect, authorizeRoles } = require('../middleware/roleMiddleware');
+// const express = require('express');
+// const router = express.Router();
+// const { protect, authorizeRoles } = require('../middleware/roleMiddleware');
 
-router.post('/admin-action', protect, authorizeRoles('superadmin'), (req, res) => {
-  res.send('Only superadmin can do this');
-});
+// router.post('/admin-action', protect, authorizeRoles('superadmin'), (req, res) => {
+//   res.send('Only superadmin can do this');
+// });
+
+// module.exports = router;
+
+
+const express = require("express");
+const router = express.Router();
+const {
+  getAllAdmins,
+  getAdminById,
+  updateAdmin,
+  deleteAdmin,
+  getAdminProfile,
+  updateAdminProfile
+} = require("../controllers/adminController");
+
+const { protect, authorizeRoles } = require("../middleware/roleMiddleware");
+
+router.get("/profile", protect, getAdminProfile);
+router.put("/profile", protect, updateAdminProfile);
+// Only superadmin can perform these actions
+router.get("/", protect, authorizeRoles("superadmin"), getAllAdmins);
+router.get("/:id", protect, authorizeRoles("superadmin"), getAdminById);
+router.put("/:id", protect, authorizeRoles("superadmin"), updateAdmin);
+router.delete("/:id", protect, authorizeRoles("superadmin"), deleteAdmin);
 
 module.exports = router;

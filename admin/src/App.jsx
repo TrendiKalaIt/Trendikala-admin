@@ -7,17 +7,18 @@ import Products from "./pages/Products";
 import AddProduct from "./pages/AddProduct";
 import Customers from "./pages/Customers";
 import Settings from "./pages/Settings";
-import LoginPage from "./pages/LoginPage"; 
+import LoginPage from "./pages/LoginPage";
 import PrivateRoute from "./components/PrivateRoute";
 import { UserProvider } from "./context/UserContext";
 import AutoLogoutHandler from "./components/AutoLogoutHandler";
+import EditProduct from "./pages/EditProduct";
 
 function App() {
   return (
     <UserProvider>
-      
+
       <BrowserRouter>
-      <AutoLogoutHandler />
+        <AutoLogoutHandler />
         <Routes>
           {/* Public Route */}
           <Route path="/login" element={<LoginPage />} />
@@ -29,6 +30,9 @@ function App() {
               <Route path="orders" element={<Orders />} />
               <Route path="products" element={<Products />} />
               <Route path="add-product" element={<AddProduct />} />
+              <Route path="edit-product/:id" element={<EditProduct />} />
+
+
               <Route path="customers" element={<Customers />} />
               <Route path="settings" element={<Settings />} />
             </Route>

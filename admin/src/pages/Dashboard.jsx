@@ -29,21 +29,61 @@ const Dashboard = () => {
   ]);
 
   useEffect(() => {
-    fetch("/data/dashboard.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setDashboardData(data);
-        const chartDataWithDates = (data.chartData || []).map((item) => ({
-          ...item,
-          date: new Date(item.date),
-        }));
-        setAllChartData(chartDataWithDates);
-      });
+  const fetchDashboardData = async () => {
+  try {
+    const token = localStorage.getItem("token");
+    const res = await fetch("http://localhost:5000/api/dashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await res.json();
 
-    fetch("/data/order.json")
-      .then((res) => res.json())
-      .then((data) => setRecentOrders(data.slice(0, 7)));
-  }, []);
+    setDashboardData(data);
+
+    const chartDataWithDates = (data.chartData || []).map((item) => ({
+      ...item,
+      date: new Date(item.date),
+    }));
+    setAllChartData(chartDataWithDates);
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+  }
+};
+
+
+ const fetchRecentOrders = async () => {
+  try {
+    const token = localStorage.getItem("token"); 
+    const res = await fetch("http://localhost:5000/api/orders", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    // Adapt data to recentOrders format used in frontend
+    const formattedOrders = data.slice(0, 7).map((order) => ({
+      orderId: order.orderId,
+      orderDate: new Date(order.createdAt).toLocaleDateString("en-IN"),
+      customerName: order.shippingInfo.fullName,
+      totalAmount: `₹${order.totalAmount}`,
+      paymentStatus: order.paymentMethod === "Razorpay" ? "Paid" : "Pending",
+      status: order.orderStatus,
+    }));
+
+    setRecentOrders(formattedOrders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+  }
+};
+
+
+  fetchDashboardData();
+  fetchRecentOrders();
+}, []);
+
 
   useEffect(() => {
     if (allChartData.length) {
@@ -99,7 +139,7 @@ const Dashboard = () => {
         {[
           { title: "Total Revenue", value: `₹${dashboardData.totalRevenue}` },
           { title: "Orders", value: dashboardData.totalOrders },
-          { title: "Register user", value: dashboardData.totalCustomers },
+          { title: "Expected Revenue", value: `₹${dashboardData.expectedRevenue}` },
           { title: "Total Products", value: dashboardData.totalProducts },
         ].map((item, index) => (
           <div key={index} className="bg-white shadow rounded-lg p-4">

@@ -1,4 +1,7 @@
+
+
 import React, { useState, useMemo, useEffect } from "react";
+import axios from "axios";
 import {
   Search,
   Plus,
@@ -9,424 +12,49 @@ import {
   Check,
   X,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 
-const initialProductsData = [
-  {
-    id: 1,
-    name: "Men Grey Hoodie",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 2,
-    name: "Women Striped T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 3,
-    name: "Women White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 4,
-    name: "Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 5,
-    name: "Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 6,
-    name: "Men Grey Hoodie",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 7,
-    name: "Women Striped T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 8,
-    name: "Women White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 9,
-    name: "Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 10,
-    name: "Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 11,
-    name: "Blue Denim Jeans",
-    category: "Bottoms",
-    inventory: 15,
-    price: "59.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=J",
-  },
-  {
-    id: 12,
-    name: "Black Leather Jacket",
-    category: "Outerwear",
-    inventory: 5,
-    price: "129.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=J",
-  },
-  {
-    id: 13,
-    name: "Sporty Sneakers",
-    category: "Footwear",
-    inventory: 20,
-    price: "75.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=S",
-  },
-  {
-    id: 14,
-    name: "Casual Cap",
-    category: "Accessories",
-    inventory: 30,
-    price: "15.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=C",
-  },
-  {
-    id: 15,
-    name: "Summer Dress",
-    category: "Dresses",
-    inventory: 12,
-    price: "45.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=D",
-  },
-  {
-    id: 16,
-    name: "Formal Shirt",
-    category: "Shirts",
-    inventory: 8,
-    price: "65.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=F",
-  },
-  {
-    id: 17,
-    name: "Yoga Pants",
-    category: "Activewear",
-    inventory: 25,
-    price: "30.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=Y",
-  },
-  {
-    id: 18,
-    name: "Winter Scarf",
-    category: "Accessories",
-    inventory: 18,
-    price: "20.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=S",
-  },
-  {
-    id: 19,
-    name: "Classic Watch",
-    category: "Accessories",
-    inventory: 7,
-    price: "99.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=W",
-  },
-  {
-    id: 20,
-    name: "Kids T-Shirt",
-    category: "Kids",
-    inventory: 40,
-    price: "19.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=K",
-  },
-  {
-    id: 21,
-    name: "Another Grey Hoodie",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 22,
-    name: "Another Striped T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 23,
-    name: "Another White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 24,
-    name: "Another Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 25,
-    name: "Another Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 26,
-    name: "Different Grey Hoodie",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 27,
-    name: "Different Striped T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 28,
-    name: "Different White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 29,
-    name: "Different Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 30,
-    name: "Different Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 31,
-    name: "More Blue Denim Jeans",
-    category: "Bottoms",
-    inventory: 15,
-    price: "59.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=J",
-  },
-  {
-    id: 32,
-    name: "More Black Leather Jacket",
-    category: "Outerwear",
-    inventory: 5,
-    price: "129.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=J",
-  },
-  {
-    id: 33,
-    name: "More Sporty Sneakers",
-    category: "Footwear",
-    inventory: 20,
-    price: "75.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=S",
-  },
-  {
-    id: 34,
-    name: "More Casual Cap",
-    category: "Accessories",
-    inventory: 30,
-    price: "15.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=C",
-  },
-  {
-    id: 35,
-    name: "More Summer Dress",
-    category: "Dresses",
-    inventory: 12,
-    price: "45.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=D",
-  },
-  {
-    id: 36,
-    name: "More Formal Shirt",
-    category: "Shirts",
-    inventory: 8,
-    price: "65.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=F",
-  },
-  {
-    id: 37,
-    name: "More Yoga Pants",
-    category: "Activewear",
-    inventory: 25,
-    price: "30.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=Y",
-  },
-  {
-    id: 38,
-    name: "More Winter Scarf",
-    category: "Accessories",
-    inventory: 18,
-    price: "20.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=S",
-  },
-  {
-    id: 39,
-    name: "More Classic Watch",
-    category: "Accessories",
-    inventory: 7,
-    price: "99.00",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=W",
-  },
-  {
-    id: 40,
-    name: "More Kids T-Shirt",
-    category: "Kids",
-    inventory: 40,
-    price: "19.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=K",
-  },
-  {
-    id: 41,
-    name: "Another Hoodie again",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 42,
-    name: "Another T-Shirt again",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 43,
-    name: "Final White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 44,
-    name: "Final Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 45,
-    name: "Final Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 46,
-    name: "Last Hoodie",
-    category: "Hoodies",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=H",
-  },
-  {
-    id: 47,
-    name: "Last Striped T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 48,
-    name: "Last White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "40.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 49,
-    name: "Last Men White T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "49.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-  {
-    id: 50,
-    name: "Last Women Red T-Shirt",
-    category: "T-Shirt",
-    inventory: 10,
-    price: "34.90",
-    image: "https://via.placeholder.com/40/cccccc/ffffff?text=T",
-  },
-];
+// Use your API base URL from environment
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const ProductsPageContent = () => {
-  const [products, setProducts] = useState(initialProductsData);
+  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
   const [editingProductId, setEditingProductId] = useState(null);
   const [editedInventory, setEditedInventory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
+  // Fetch products from backend API on mount
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line
+  }, []);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem('token'); // Or wherever your auth token is stored
+      const response = await axios.get(`${API_URL}/api/products`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProducts(response.data);
+    } catch (err) {
+      console.error("Failed to fetch products", err);
+      setProducts([]);
+    }
+    setLoading(false);
+  };
+
+
   const filteredProducts = useMemo(() => {
     return products.filter((product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+      product?.productName?.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }, [products, searchTerm]);
 
@@ -461,8 +89,8 @@ const ProductsPageContent = () => {
   };
 
   const handleEditInventoryClick = (product) => {
-    setEditingProductId(product.id);
-    setEditedInventory(String(product.inventory));
+    setEditingProductId(product._id || product.id);
+    setEditedInventory(String(product.stock));
   };
 
   const handleInventoryChange = (e) => {
@@ -472,22 +100,29 @@ const ProductsPageContent = () => {
     }
   };
 
-  const handleSaveInventory = (productId) => {
+  const handleSaveInventory = async (productId) => {
     const newInventoryValue = parseInt(editedInventory, 10);
     if (isNaN(newInventoryValue) || newInventoryValue < 0) {
       alert("Please enter a valid non-negative number for inventory.");
       return;
     }
-
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, inventory: newInventoryValue }
-          : product
-      )
-    );
-    setEditingProductId(null);
-    setEditedInventory("");
+    try {
+      await axios.patch(`${API_URL}/api/products/inventory/${productId}`, {
+        inventory: newInventoryValue,
+      });
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          (product._id || product.id) === productId
+            ? { ...product, inventory: newInventoryValue }
+            : product
+        )
+      );
+      setEditingProductId(null);
+      setEditedInventory("");
+    } catch (err) {
+      alert("Failed to update inventory.");
+      console.error(err);
+    }
   };
 
   const handleCancelEdit = () => {
@@ -496,35 +131,42 @@ const ProductsPageContent = () => {
   };
 
   // --- Delete Functionality ---
-  const handleDeleteProduct = (productId, productName) => {
+  const handleDeleteProduct = async (productId, productName) => {
     if (
       window.confirm(
         `Are you sure you want to delete "${productName}"? This action cannot be undone.`
       )
     ) {
-      setProducts((prevProducts) => {
-        const updatedProducts = prevProducts.filter(
-          (product) => product.id !== productId
+      try {
+        const token = localStorage.getItem('token'); // Adjust if you store token under a different key
+        await axios.delete(`${API_URL}/api/products/${productId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const updatedProducts = products.filter(
+          (product) => (product._id || product.id) !== productId
         );
-        return updatedProducts;
-      });
+        setProducts(updatedProducts);
 
-      const newTotalPages = Math.ceil(
-        filteredProducts.filter((p) => p.id !== productId).length / itemsPerPage
-      );
+        const newTotalPages = Math.ceil(updatedProducts.length / itemsPerPage);
+        if (currentPage > newTotalPages && newTotalPages > 0) {
+          setCurrentPage(newTotalPages);
+        } else if (updatedProducts.length === 0) {
+          setCurrentPage(1);
+        }
 
-      if (currentPage > newTotalPages && newTotalPages > 0) {
-        setCurrentPage(newTotalPages);
-      } else if (filteredProducts.length - 1 === 0 && searchTerm === "") {
-        setCurrentPage(1);
-      } else if (filteredProducts.length - 1 === 0 && searchTerm !== "") {
-        setCurrentPage(1);
-      } else if (newTotalPages === 0 && filteredProducts.length > 0) {
-        setCurrentPage(1);
+        setEditingProductId(null);
+        toast.success(`"${productName}" deleted successfully.`);
+      } catch (err) {
+        toast.error("Failed to delete product.");
+        console.error(err);
       }
-      setEditingProductId(null);
     }
   };
+
+
 
   const handleAddProductClick = () => {
     navigate("/add-product");
@@ -533,16 +175,13 @@ const ProductsPageContent = () => {
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxPageButtons = 6;
-
     if (totalPages <= maxPageButtons) {
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
       const leftEllipsisThreshold = Math.floor(maxPageButtons / 2);
-      const rightEllipsisThreshold =
-        totalPages - Math.floor((maxPageButtons - 1) / 2);
-
+      const rightEllipsisThreshold = totalPages - Math.floor((maxPageButtons - 1) / 2);
       if (currentPage <= leftEllipsisThreshold) {
         for (let i = 1; i <= maxPageButtons - 2; i++) {
           pageNumbers.push(i);
@@ -562,7 +201,6 @@ const ProductsPageContent = () => {
         }
         const startPage = currentPage - Math.floor((maxPageButtons - 5) / 2);
         const endPage = currentPage + Math.floor((maxPageButtons - 5) / 2);
-
         for (
           let i = Math.max(2, startPage);
           i <= Math.min(totalPages - 1, endPage);
@@ -596,9 +234,8 @@ const ProductsPageContent = () => {
             />
           </div>
           <div className="flex gap-3">
-            <button className="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-md text-sm font-medium hover:bg-gray-200 transition-colors duration-200">
-              Export
-            </button>
+
+
             <button
               onClick={handleAddProductClick}
               className="px-5 py-2.5 bg-green-500 text-white rounded-md text-sm font-medium flex items-center gap-2 hover:bg-green-600 transition-colors duration-200"
@@ -637,21 +274,29 @@ const ProductsPageContent = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {currentProducts.length > 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="4" className="px-6 py-4 text-center text-gray-500">Loading...</td>
+                </tr>
+              ) : currentProducts.length > 0 ? (
                 currentProducts.map((product) => (
-                  <tr key={product.id}>
+                  <tr key={product._id || product.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
                           <img
                             className="h-10 w-10 rounded-md object-cover border border-gray-200"
-                            src={product.image}
-                            alt={product.name}
+                            src={
+                              product.media?.find((m) => m.type === "image")?.url ||
+                              "https://via.placeholder.com/40?text=No+Image"
+                            }
+                            alt={product.productName}
                           />
+
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {product.name}
+                            {product.productName}
                           </div>
                           <div className="text-xs text-gray-500">
                             {product.category}
@@ -660,7 +305,7 @@ const ProductsPageContent = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                      {editingProductId === product.id ? (
+                      {editingProductId === (product._id || product.id) ? (
                         <div className="flex items-center gap-1">
                           <input
                             type="text"
@@ -668,13 +313,13 @@ const ProductsPageContent = () => {
                             onChange={handleInventoryChange}
                             onKeyDown={(e) => {
                               if (e.key === "Enter")
-                                handleSaveInventory(product.id);
+                                handleSaveInventory(product._id || product.id);
                               if (e.key === "Escape") handleCancelEdit();
                             }}
                             className="w-16 px-2 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-1 focus:ring-green-500"
                           />
                           <button
-                            onClick={() => handleSaveInventory(product.id)}
+                            onClick={() => handleSaveInventory(product._id || product.id)}
                             className="p-1 text-green-600 hover:text-green-700 rounded-md transition-colors duration-200"
                             title="Save"
                           >
@@ -690,14 +335,14 @@ const ProductsPageContent = () => {
                         </div>
                       ) : (
                         <div className="flex items-center gap-2">
-                          {product.inventory}
-                          <button
+                          {product.stock}
+                          {/* <button
                             onClick={() => handleEditInventoryClick(product)}
                             className="text-gray-500 hover:text-green-600 transition-colors duration-200"
                             title="Edit Inventory"
                           >
                             <Edit className="h-4 w-4" />
-                          </button>
+                          </button> */}
                         </div>
                       )}
                     </td>
@@ -707,16 +352,26 @@ const ProductsPageContent = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end gap-3">
                         <button
+                          onClick={() => navigate(`/edit-product/${product._id || product.id}`)}
+                          className="text-gray-500 hover:text-green-600 transition-colors duration-200"
+                          title="Edit Product"
+                          aria-label={`Edit product ${product.productName}`}
+                        >
+                          <Edit className="h-5 w-5" />
+                        </button>
+                        <button
                           onClick={() =>
-                            handleDeleteProduct(product.id, product.name)
+                            handleDeleteProduct(product._id || product.id, product.productName)
                           }
                           className="text-gray-500 hover:text-red-600 transition-colors duration-200"
                           title="Delete Product"
+                          aria-label={`Delete product ${product.productName}`}
                         >
                           <Trash2 className="h-5 w-5" />
                         </button>
                       </div>
                     </td>
+
                   </tr>
                 ))
               ) : (
@@ -739,11 +394,10 @@ const ProductsPageContent = () => {
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className={`p-2 rounded-md transition-colors duration-200 ${
-                currentPage === 1
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-gray-500 hover:bg-gray-200"
-              }`}
+              className={`p-2 rounded-md transition-colors duration-200 ${currentPage === 1
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-500 hover:bg-gray-200"
+                }`}
             >
               <ArrowLeft className="h-4 w-4" />
             </button>
@@ -761,11 +415,10 @@ const ProductsPageContent = () => {
                   key={pageNumber}
                   onClick={() => handlePageChange(pageNumber)}
                   className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                                        ${
-                                          currentPage === pageNumber
-                                            ? "text-white bg-green-500 hover:bg-green-600"
-                                            : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-100"
-                                        }`}
+                                    ${currentPage === pageNumber
+                      ? "text-white bg-green-500 hover:bg-green-600"
+                      : "text-gray-700 bg-white border border-gray-300 hover:bg-gray-100"
+                    }`}
                 >
                   {pageNumber}
                 </button>
@@ -775,11 +428,10 @@ const ProductsPageContent = () => {
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className={`p-2 rounded-md transition-colors duration-200 ${
-                currentPage === totalPages
-                  ? "text-gray-400 cursor-not-allowed"
-                  : "text-gray-500 hover:bg-gray-200"
-              }`}
+              className={`p-2 rounded-md transition-colors duration-200 ${currentPage === totalPages
+                ? "text-gray-400 cursor-not-allowed"
+                : "text-gray-500 hover:bg-gray-200"
+                }`}
             >
               <ArrowRight className="h-4 w-4" />
             </button>
