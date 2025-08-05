@@ -12,6 +12,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { UserProvider } from "./context/UserContext";
 import AutoLogoutHandler from "./components/AutoLogoutHandler";
 import EditProduct from "./pages/EditProduct";
+import Logs from "./pages/Logs";
 
 function App() {
   return (
@@ -34,6 +35,8 @@ function App() {
 
 
               <Route path="customers" element={<Customers />} />
+              <Route path="logs" element={<Logs />} />
+
               <Route path="settings" element={<Settings />} />
             </Route>
           </Route>

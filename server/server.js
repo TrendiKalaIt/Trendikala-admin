@@ -12,6 +12,10 @@ const productRoutes = require('./routes/productRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const logRoutes = require("./routes/logRoutes");
+const { protect } = require('./middleware/roleMiddleware');
+const autoLogger = require('./middleware/autoLogger');
+
 
 
 const app = express();
@@ -32,14 +36,18 @@ app.get('/', (req, res) => {
 
 app.use(express.json());
 
-// Routes
+
 app.use("/api/auth", authRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes);
-app.use('/api/dashboard', dashboardRoutes);
-app.use('/api/admins', adminRoutes);
+
+
+// Routes
+app.use("/api/logs",protect, logRoutes);
+app.use('/api/orders',protect,autoLogger, orderRoutes);
+app.use('/api/users',protect,autoLogger, userRoutes);
+app.use('/api/products',protect,autoLogger, productRoutes);
+app.use('/api/categories',protect,autoLogger, categoryRoutes);
+app.use('/api/dashboard',protect,autoLogger, dashboardRoutes);
+app.use('/api/admins',protect,autoLogger, adminRoutes);
 
 
 // Start server

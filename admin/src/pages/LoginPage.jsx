@@ -1,35 +1,35 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useUser } from "../context/UserContext"; 
+import { useUser } from "../context/UserContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useUser(); 
+  const { setUser } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/auth/login`, {
-        email,
-        password,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
 
       const { token, user } = res.data;
 
       localStorage.setItem("token", token);
-localStorage.setItem("user", JSON.stringify(user)); 
+      localStorage.setItem("user", JSON.stringify(user));
 
-
-      // Set context
       setUser({
         ...user,
         isAuthenticated: true,
       });
 
-      
       if (user.role === "superadmin") {
         navigate("/");
       } else {

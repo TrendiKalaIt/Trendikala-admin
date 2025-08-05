@@ -71,7 +71,8 @@ const Dashboard = () => {
           orderDate: new Date(order.createdAt).toLocaleDateString("en-IN"),
           customerName: order.shippingInfo.fullName,
           totalAmount: `₹${order.totalAmount}`,
-          paymentStatus: order.paymentMethod === "Razorpay" ? "Paid" : "Pending",
+          paymentStatus:   order.paymentStatus ||
+            (order.paymentMethod === "Razorpay" ? "Paid" : "Pending"),
           status: order.orderStatus,
         }));
 
@@ -84,6 +85,8 @@ const Dashboard = () => {
 
     fetchDashboardData();
     fetchRecentOrders();
+
+    
   }, []);
 
 

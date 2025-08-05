@@ -81,10 +81,14 @@ const ProductsPageContent = () => {
       try {
         const token = localStorage.getItem('token');
         await axios.delete(`${API_URL}/api/products/${productId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  headers: {
+    Authorization: `Bearer ${token}`,
+    "x-product-name": productName,
+    "x-user-name": localStorage.getItem("userName"),
+    "x-user-role": localStorage.getItem("userRole"),
+  }
+});
+
 
         const updatedProducts = products.filter(
           (product) => (product._id || product.id) !== productId

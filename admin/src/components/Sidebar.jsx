@@ -5,6 +5,7 @@ import {
   Boxes,
   Users,
   Settings,
+  LogsIcon,
 } from "lucide-react";
 import { useUser } from "../context/UserContext";
 
@@ -40,6 +41,12 @@ const Sidebar = ({ isOpen }) => {
       path: "/customers",
       icon: Users,
       roles: ["admin", "superadmin"],
+    },
+    {
+      name: "Logs",
+      path: "/logs",
+      icon: LogsIcon,
+      roles: ["superadmin"],
     },
     {
       name: "Settings",

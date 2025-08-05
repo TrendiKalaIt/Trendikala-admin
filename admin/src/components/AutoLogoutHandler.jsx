@@ -13,10 +13,10 @@ const AutoLogoutHandler = () => {
   };
 
   useEffect(() => {
-    // Auto logout after 30 minutes
+    // Auto logout after 50 minutes
     const timer = setTimeout(() => {
       logout();
-    }, 30 * 60 * 1000); 
+    }, 50 * 60 * 1000); 
 
     
     const navigationEntries = performance.getEntriesByType("navigation");

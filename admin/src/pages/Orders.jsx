@@ -5,23 +5,6 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-const getStatusColor = (status) => {
-  if (!status) return "text-gray-500";
-  switch (status.toLowerCase()) {
-    case "paid":
-    case "delivered":
-      return "bg-green-100 text-green-700";
-    case "pending":
-      return "bg-yellow-100 text-yellow-700";
-    case "failed":
-    case "cancelled":
-      return "bg-red-100 text-red-700";
-    case "shipped":
-      return "bg-blue-100 text-blue-700";
-    default:
-      return "bg-gray-100 text-gray-700";
-  }
-};
 
 
 
@@ -35,7 +18,7 @@ const Orders = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const pageSize = 10;
 
-  const userRole = "admin";
+  
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -210,20 +193,14 @@ const Orders = () => {
               setCurrentPage(1);
             }}
           />
-          {/* <div className="space-x-2">
-            <button className="p-2 rounded border hover:bg-gray-100 text-red-500">
-              🗑
-            </button>
-          </div> */}
+         
         </div>
 
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left">
             <thead className="bg-[#e2ebdd] text-[#3a4d39]">
               <tr>
-                {/* <th className="px-3 py-2">
-                  <input type="checkbox" />
-                </th> */}
+                
                 <th className="px-3 py-2">Order</th>
                 <th className="px-3 py-2">Date</th>
                 <th className="px-3 py-2">Customer</th>
@@ -235,13 +212,7 @@ const Orders = () => {
             <tbody>
               {paginatedOrders.map((order, index) => (
                 <tr key={order.id} className="border-b hover:bg-gray-50">
-                  {/* <td className="px-3 py-2">
-                    <input
-                      type="checkbox"
-                      checked={!!selectedRows[order.id]}
-                      onChange={() => toggleSelect(order.id)}
-                    />
-                  </td> */}
+                  
                   <td
                     className="px-3 py-2 text-blue-600 font-medium cursor-pointer underline"
                     onClick={() =>
@@ -257,30 +228,8 @@ const Orders = () => {
                       : `Registered`}
                   </td>
                   <td className="px-3 py-2">{order.paymentStatus}</td>
-                  {/* <td className="px-3 py-2">
-                    <select
-                      disabled={userRole !== "admin"}
-                      className={`border px-2 py-1 rounded font-medium capitalize ${getStatusColor(
-                        order.orderStatus
-                      )} ${userRole !== "admin"
-                          ? "opacity-60 cursor-not-allowed"
-                          : ""
-                        }`}
-                      value={order.orderStatus || "Pending"}
-                      onChange={(e) =>
-                        handleStatusChange(
-                          orders.findIndex((o) => o.id === order.id),
-                          "orderStatus",
-                          e.target.value
-                        )
-                      }
-                    >
-                      <option>Pending</option>
-                      <option>Shipped</option>
-                      <option>Delivered</option>
-                      <option>Cancelled</option>
-                    </select>
-                  </td> */}
+                  
+                     
                   <td className="py-2">
                     {["Delivered", "Cancelled"].includes(order.orderStatus) ? (
                       <div className="flex items-center gap-1 text-gray-500">
