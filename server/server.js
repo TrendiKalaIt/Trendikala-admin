@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const cors = require('cors'); // ⬅️ import cors
+const cors = require('cors'); 
 const connectDB = require('./config/mongodb');
 const cloudinary = require('./config/cloudinary')
 const orderRoutes = require('./routes/orderRoutes');

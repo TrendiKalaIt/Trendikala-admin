@@ -223,9 +223,10 @@ const Orders = () => {
                   </td>
                   <td className="px-3 py-2">{order.date}</td>
                   <td className="px-3 py-2">
-                    {order.isGuest
+                    {/* {order.isGuest
                       ? `Guest`
-                      : `Registered`}
+                      : `Registered`} */}
+                      {order.customer}
                   </td>
                   <td className="px-3 py-2">{order.paymentStatus}</td>
                   
