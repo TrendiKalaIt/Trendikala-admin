@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true, trim: true },
   description: { type: String },
   slug: { type: String, unique: true, lowercase: true },
-  icon: { type: String }, // icon ya image URL for frontend display
+  icon: { type: String }, 
   parent: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null },
 }, { timestamps: true });
 

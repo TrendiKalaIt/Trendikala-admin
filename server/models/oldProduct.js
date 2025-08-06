@@ -54,7 +54,7 @@ const productSchema = new mongoose.Schema({
   }],
 
   // Stock tracking
-  stock: { type: Number, required: true, default: 0 }, // Add this field
+  stock: { type: Number, required: true, default: 0 }, 
 
   // Embedded reviews
   reviews: [reviewSchema],
@@ -68,7 +68,7 @@ productSchema.virtual('inStock').get(function () {
   return this.stock > 0;
 });
 
-// Ensure virtual fields are serialized in JSON and Object outputs
+
 productSchema.set('toObject', { virtuals: true });
 productSchema.set('toJSON', { virtuals: true });
 

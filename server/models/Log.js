@@ -6,7 +6,7 @@ const logSchema = new mongoose.Schema({
   userRole: { type: String, required: true },
   method: { type: String, required: true }, // POST, PUT, DELETE
   endpoint: { type: String, required: true },
-  action: { type: String, required: true }, // e.g. Added Product
+  action: { type: String, required: true }, 
   details: { type: String },
   timestamp: { type: Date, default: Date.now }
 });

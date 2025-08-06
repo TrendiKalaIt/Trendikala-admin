@@ -1,5 +1,4 @@
 
-// routes/adminRoutes.js (ya jo bhi aapka admin route file ho)
 const express = require('express');
 const router = express.Router();
 const { getDashboardRevenue } = require('../controllers/dashboardController');

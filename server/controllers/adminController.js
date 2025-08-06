@@ -55,7 +55,7 @@ exports.deleteAdmin = async (req, res) => {
 // GET current admin's profile
 exports.getAdminProfile = async (req, res) => {
   try {
-    res.status(200).json(req.user); // `req.user` is set by `protect` middleware
+    res.status(200).json(req.user); 
   } catch (err) {
     res.status(500).json({ message: "Error fetching profile" });
   }

@@ -65,7 +65,7 @@ const Dashboard = () => {
 
         const data = await res.json();
 
-        // Adapt data to recentOrders format used in frontend
+        
         const formattedOrders = data.slice(0, 7).map((order) => ({
           orderId: order.orderId,
           orderDate: new Date(order.createdAt).toLocaleDateString("en-IN"),

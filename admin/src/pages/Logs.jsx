@@ -149,43 +149,42 @@ const Logs = () => {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full border-collapse border border-gray-200">
-          <thead>
-            <tr className="bg-gray-100 text-left">
-              <th className="p-3 border text-[#A2D286]">Delete</th>
-
-              <th className="p-3 border text-[#A2D286]">Date</th>
-              <th className="p-3 border text-[#A2D286]">User</th>
-              <th className="p-3 border text-[#A2D286]">Role</th>
-              <th className="p-3 border text-[#A2D286]">Action</th>
-              <th className="p-3 border text-[#A2D286]">Details</th>
+      <div className="overflow-x-auto border rounded-lg">
+        <table className="min-w-full text-sm text-gray-700">
+          <thead className="bg-[#F7FAF7] text-[#49951C] uppercase text-xs tracking-wider border-b border-gray-200">
+            <tr>
+              <th className="px-4 py-3 text-center">Delete</th>
+              <th className="px-4 py-3 text-left">Date</th>
+              <th className="px-4 py-3 text-left">User</th>
+              <th className="px-4 py-3 text-left">Role</th>
+              <th className="px-4 py-3 text-left">Action</th>
+              <th className="px-4 py-3 text-left">Details</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-gray-100">
             {currentLogs.length > 0 ? (
-              currentLogs.map((log) => (
-                <tr key={log._id} className="hover:bg-gray-50">
-                  <td className="p-3 border text-center">
+              currentLogs.map((log, index) => (
+                <tr
+                  key={log._id}
+                  className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                >
+                  <td className="px-4 py-3 text-center align-top">
                     <button
                       onClick={() => deleteLog(log._id)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 transition"
                     >
                       <Trash2 size={18} />
                     </button>
                   </td>
-                  <td
-                    className="p-3 border text-center align-middle"
-                    style={{ minWidth: "130px" }}
-                  >
-                    <div style={{ whiteSpace: "nowrap" }}>
+                  <td className="px-4 py-3 align-top whitespace-nowrap">
+                    <div className="font-medium">
                       {new Date(log.timestamp).toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "long",
+                        day: "2-digit",
+                        month: "short",
                         year: "2-digit",
                       })}
                     </div>
-                    <div>
+                    <div className="text-xs text-gray-500">
                       {new Date(log.timestamp).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
@@ -193,18 +192,19 @@ const Logs = () => {
                       })}
                     </div>
                   </td>
-
-                  <td className="p-3 border">{log.userName}</td>
-                  <td className="p-3 border">{log.userRole}</td>
-                  <td className="p-3 border">{log.action}</td>
-                  <td className="p-3 border">
+                  <td className="px-4 py-3 align-top">{log.userName}</td>
+                  <td className="px-4 py-3 align-top">{log.userRole}</td>
+                  <td className="px-4 py-3 align-top">{log.action}</td>
+                  <td className="px-4 py-3 align-top max-w-xs">
                     {log.details ? (
                       isValidJSON(log.details) ? (
-                        <pre className="whitespace-pre-wrap text-sm">
+                        <pre className="whitespace-pre-wrap text-xs bg-gray-100 p-2 rounded overflow-x-auto max-h-40">
                           {JSON.stringify(JSON.parse(log.details), null, 2)}
                         </pre>
                       ) : (
-                        log.details
+                        <div className="text-sm text-gray-800">
+                          {log.details}
+                        </div>
                       )
                     ) : (
                       "-"
@@ -214,7 +214,7 @@ const Logs = () => {
               ))
             ) : (
               <tr>
-                <td colSpan="6" className="text-center p-4 text-gray-500">
+                <td colSpan="6" className="text-center py-6 text-gray-500">
                   No activity logs found
                 </td>
               </tr>
