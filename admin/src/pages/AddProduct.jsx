@@ -304,26 +304,7 @@ return (
                 className="w-full mt-2 p-3 border border-green-300 rounded-lg min-h-[100px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
               />
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
-              <label className="block font-medium text-gray-700 mb-2">
-                Detailed Description (Paragraph 1)
-                <textarea
-                  name="detailedDescription.paragraph1"
-                  value={formData.detailedDescription.paragraph1}
-                  onChange={handleChange}
-                  className="w-full mt-2 p-3 border border-gray-300 rounded-lg min-h-[80px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                />
-              </label>
-              <label className="block font-medium text-gray-700 mb-2">
-                Detailed Description (Paragraph 2)
-                <textarea
-                  name="detailedDescription.paragraph2"
-                  value={formData.detailedDescription.paragraph2}
-                  onChange={handleChange}
-                  className="w-full mt-2 p-3 border border-green-300 rounded-lg min-h-[80px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                />
-              </label>
-            </div>
+          
           </section>
 
           {/* Section: Variations */}
