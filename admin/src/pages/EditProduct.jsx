@@ -336,7 +336,7 @@ const EditProduct = ({ onSuccess }) => {
                                         onChange={handleChange}
                                         className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
                                         min="0"
-                                        step="0.01"
+                                        step="1"
                                         {...(field === 'discountPercent' ? { max: 100 } : {})}
                                     />
                                 </label>
