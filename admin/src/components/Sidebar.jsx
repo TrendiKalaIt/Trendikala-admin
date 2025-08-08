@@ -6,6 +6,9 @@ import {
   Users,
   Settings,
   LogsIcon,
+  NotebookPen,
+  Contact2Icon
+
 } from "lucide-react";
 import { useUser } from "../context/UserContext";
 
@@ -48,7 +51,20 @@ const Sidebar = ({ isOpen }) => {
       icon: LogsIcon,
       roles: ["superadmin"],
     },
+   
     {
+      name: "Enquiry Details",
+      path: "/enquiry",
+      icon: NotebookPen,
+      roles: ["admin","superadmin"],
+    },
+     {
+      name: "ContactUs Details",
+      path: "/contactus",
+      icon: Contact2Icon,
+      roles: ["admin","superadmin"],
+    },
+     {
       name: "Settings",
       path: "/settings",
       icon: Settings,
