@@ -13,6 +13,8 @@ import { UserProvider } from "./context/UserContext";
 import AutoLogoutHandler from "./components/AutoLogoutHandler";
 import EditProduct from "./pages/EditProduct";
 import Logs from "./pages/Logs";
+import Enquiry from "./pages/Enquiry";
+import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
 
               <Route path="customers" element={<Customers />} />
               <Route path="logs" element={<Logs />} />
+              <Route path="enquiry" element={<Enquiry />} />
+              <Route path="contactus" element={<ContactUs />} />
 
               <Route path="settings" element={<Settings />} />
             </Route>

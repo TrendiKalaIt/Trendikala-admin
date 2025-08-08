@@ -15,6 +15,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const logRoutes = require("./routes/logRoutes");
 const { protect } = require('./middleware/roleMiddleware');
 const autoLogger = require('./middleware/autoLogger');
+const enquiryRoutes = require('./routes/enquiryRoutes');
+const contactMessageRoutes = require("./routes/contactMessageRoutes");
 
 
 
@@ -48,6 +50,8 @@ app.use('/api/products',protect,autoLogger, productRoutes);
 app.use('/api/categories',protect,autoLogger, categoryRoutes);
 app.use('/api/dashboard',protect,autoLogger, dashboardRoutes);
 app.use('/api/admins',protect,autoLogger, adminRoutes);
+app.use('/api/enquiries', enquiryRoutes);
+app.use("/api/contact-messages", contactMessageRoutes);
 
 
 // Start server

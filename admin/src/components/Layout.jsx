@@ -33,7 +33,8 @@ const Layout = () => {
 
         {/* Main Content: Margin adjusted to sidebar width */}
         <main
-          className={`flex-1 overflow-y-auto p-0 transition-all duration-300
+          className={`flex-1 overflow-y-auto lg:mt-2 mt-5
+           p-0 transition-all duration-300
             ${sidebarOpen && windowWidth >= 768 ? "ml-64" : "ml-16"}
           `}
         >
