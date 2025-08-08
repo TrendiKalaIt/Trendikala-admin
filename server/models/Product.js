@@ -34,7 +34,15 @@ const productSchema = new mongoose.Schema({
   },
   materialWashing: [ { label: String, value: String } ],
   sizeShape: [ { label: String, value: String } ],
-  stock: { type: Number, default: 0 },
+ stock: {
+  type: Number,
+  default: 0,
+  validate: {
+    validator: Number.isInteger,
+    message: '{VALUE} is not an integer value for stock',
+  },
+}
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

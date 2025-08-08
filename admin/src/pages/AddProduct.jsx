@@ -1,40 +1,37 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-
-
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+const API_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 const AddProduct = () => {
   const [formData, setFormData] = useState({
-    productName: '',
-    category: '',
-    brand: '',
-    price: '',
-    discountPrice: '',
-    discountPercent: '',
-    description: '',
-    detailedDescription: { paragraph1: '', paragraph2: '' },
+    productName: "",
+    category: "",
+    brand: "",
+    price: "",
+    discountPrice: "",
+    discountPercent: "",
+    description: "",
+    detailedDescription: { paragraph1: "", paragraph2: "" },
     colors: [],
-    sizes: '',
+    sizes: "",
     details: {
-      fabric: '',
-      fitType: '',
-      length: '',
-      sleeveNeckType: '',
-      patternPrint: '',
-      occasionType: '',
-      washCare: '',
-      countryOfOrigin: '',
-      deliveryReturns: '',
+      fabric: "",
+      fitType: "",
+      length: "",
+      sleeveNeckType: "",
+      patternPrint: "",
+      occasionType: "",
+      washCare: "",
+      countryOfOrigin: "",
+      deliveryReturns: "",
     },
-    materialWashing: '',
-    sizeShape: '',
-    stock: '',
+    materialWashing: "",
+    sizeShape: "",
+    stock: "",
   });
 
   // Array of media file groups: each group is { id, files: [File], previews: [{id,url,type}] }
@@ -42,18 +39,17 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
 
-
-   useEffect(() => {
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         setLoadingCategories(true);
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         const response = await axios.get(`${API_URL}/api/categories`, {
-          headers: { Authorization: `Bearer ${token}` }, // Remove if no auth needed
+          headers: { Authorization: `Bearer ${token}` },
         });
         setCategories(response.data);
       } catch (error) {
-        console.error('Failed to fetch categories:', error);
+        console.error("Failed to fetch categories:", error);
       } finally {
         setLoadingCategories(false);
       }
@@ -61,12 +57,16 @@ const AddProduct = () => {
     fetchCategories();
   }, []);
 
- 
-
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name.includes('.')) {
-      const [parent, child] = name.split('.');
+    const { name, value, type } = e.target;
+
+    // Validation: Allow only numeric values (empty or valid number)
+    if (type === "number" && value !== "" && isNaN(value)) {
+      return; // Invalid input, ignore it
+    }
+
+    if (name.includes(".")) {
+      const [parent, child] = name.split(".");
       setFormData((prev) => ({
         ...prev,
         [parent]: { ...prev[parent], [child]: value },
@@ -85,7 +85,7 @@ const AddProduct = () => {
   const addColor = () => {
     setFormData((prev) => ({
       ...prev,
-      colors: [...prev.colors, { name: '', hex: '#000000' }],
+      colors: [...prev.colors, { name: "", hex: "#000000" }],
     }));
   };
 
@@ -99,10 +99,10 @@ const AddProduct = () => {
     const updatedGroups = mediaGroups.map((group) => {
       if (group.id === groupId) {
         const newFiles = Array.from(files);
-        const newPreviews = newFiles.map(file => ({
+        const newPreviews = newFiles.map((file) => ({
           id: uuidv4(),
           url: URL.createObjectURL(file),
-          type: file.type.startsWith('image/') ? 'image' : 'video',
+          type: file.type.startsWith("image/") ? "image" : "video",
         }));
         return {
           ...group,
@@ -116,7 +116,10 @@ const AddProduct = () => {
   };
 
   const addMediaGroup = () => {
-    setMediaGroups((prev) => [...prev, { id: uuidv4(), files: [], previews: [] }]);
+    setMediaGroups((prev) => [
+      ...prev,
+      { id: uuidv4(), files: [], previews: [] },
+    ]);
   };
 
   const removeMediaGroup = (groupId) => {
@@ -124,10 +127,10 @@ const AddProduct = () => {
   };
 
   const formatArrayFromTextarea = (text) => {
-    const lines = text.split('\n').filter(Boolean);
+    const lines = text.split("\n").filter(Boolean);
     return lines.map((line) => {
-      const [label, ...values] = line.split(':');
-      return { label: label?.trim(), value: values?.join(':').trim() };
+      const [label, ...values] = line.split(":");
+      return { label: label?.trim(), value: values?.join(":").trim() };
     });
   };
 
@@ -135,7 +138,7 @@ const AddProduct = () => {
     e.preventDefault();
 
     if (!formData.productName.trim() || !formData.category.trim()) {
-      toast.error('Please fill in all required fields.');
+      toast.error("Please fill in all required fields.");
       return;
     }
 
@@ -144,13 +147,21 @@ const AddProduct = () => {
 
       for (const key in formData) {
         const value = formData[key];
-        if (typeof value === 'object' && !Array.isArray(value)) {
+        if (typeof value === "object" && !Array.isArray(value)) {
           data.append(key, JSON.stringify(value));
-        } else if (key === 'sizes') {
-          data.append(key, JSON.stringify(value.split(',').map((s) => s.trim()).filter(Boolean)));
-        } else if (key === 'colors') {
+        } else if (key === "sizes") {
+          data.append(
+            key,
+            JSON.stringify(
+              value
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean)
+            )
+          );
+        } else if (key === "colors") {
           data.append(key, JSON.stringify(value));
-        } else if (key === 'materialWashing' || key === 'sizeShape') {
+        } else if (key === "materialWashing" || key === "sizeShape") {
           data.append(key, JSON.stringify(formatArrayFromTextarea(value)));
         } else {
           data.append(key, value);
@@ -160,66 +171,66 @@ const AddProduct = () => {
       // Append all media files from all groups
       mediaGroups.forEach((group) => {
         group.files.forEach((file) => {
-          data.append('media', file);
+          data.append("media", file);
         });
       });
 
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       await axios.post(`${API_URL}/api/products/add`, data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
 
-      toast.success('Product added successfully!');
+      toast.success("Product added successfully!");
       // Reset form if needed
       setFormData({
-        productName: '',
-        category: '',
-        brand: '',
-        price: '',
-        discountPrice: '',
-        discountPercent: '',
-        description: '',
-        detailedDescription: { paragraph1: '', paragraph2: '' },
+        productName: "",
+        category: "",
+        brand: "",
+        price: "",
+        discountPrice: "",
+        discountPercent: "",
+        description: "",
+        detailedDescription: { paragraph1: "", paragraph2: "" },
         colors: [],
-        sizes: '',
+        sizes: "",
         details: {
-          fabric: '',
-          fitType: '',
-          length: '',
-          sleeveNeckType: '',
-          patternPrint: '',
-          occasionType: '',
-          washCare: '',
-          countryOfOrigin: '',
-          deliveryReturns: '',
+          fabric: "",
+          fitType: "",
+          length: "",
+          sleeveNeckType: "",
+          patternPrint: "",
+          occasionType: "",
+          washCare: "",
+          countryOfOrigin: "",
+          deliveryReturns: "",
         },
-        materialWashing: '',
-        sizeShape: '',
-        stock: '',
+        materialWashing: "",
+        sizeShape: "",
+        stock: "",
       });
       setMediaGroups([]);
     } catch (err) {
-      toast.error('Failed to add product. Please check your inputs.');
+      toast.error("Failed to add product. Please check your inputs.");
       console.error(err);
     }
   };
 
-
-
-
-return (
+  return (
     <div className="min-h-screen bg-gray-100 py-8">
       <ToastContainer position="top-right" autoClose={3500} />
       <div className="bg-white rounded-xl shadow-xl p-6 md:p-10 max-w-4xl mt-2 mx-auto border-t-8 border-green-600">
-        <h2 className="text-3xl font-bold text-green-800 mb-7 text-center">Add New Product</h2>
+        <h2 className="text-3xl font-bold text-green-800 mb-7 text-center">
+          Add New Product
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-10">
-          
           {/* Section: General Information */}
           <section>
-            <h3 className="text-xl font-semibold text-green-400 border-l-4 border-green-400 pl-4 mb-5">General Information</h3>
+            <h3 className="text-xl font-semibold text-green-400 border-l-4 border-green-400 pl-4 mb-5">
+              General Information
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <label className="block font-medium text-gray-700 mb-2">
@@ -248,8 +259,10 @@ return (
                       className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
                     >
                       <option value="">Select a category</option>
-                      {categories.map(cat => (
-                        <option key={cat._id} value={cat._id}>{cat.name}</option>
+                      {categories.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.name}
+                        </option>
                       ))}
                     </select>
                   )}
@@ -272,29 +285,42 @@ return (
 
           {/* Section: Pricing & Stock */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Pricing & Stock</h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Pricing & Stock
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {['price', 'discountPrice', 'stock'].map((field, i) => (
-                <label key={field} className="block font-medium text-gray-700 mb-2">
-                  {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
-                  <input
-                    type="number"
-                    name={field}
-                    value={formData[field]}
-                    onChange={handleChange}
-                    className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                    min="0"
-                    {...(field === 'discountPercent' ? { max: 100 } : {})}
-                    step="0.01"
-                  />
-                </label>
-              ))}
+              {["price", "discountPrice", "discountPercent", "stock"].map(
+                (field) => (
+                  <label
+                    key={field}
+                    htmlFor={field}
+                    className="block font-medium text-gray-700 mb-2"
+                  >
+                    {field.charAt(0).toUpperCase() +
+                      field.slice(1).replace(/([A-Z])/g, " $1")}
+                    <input
+                      id={field}
+                      type="number"
+                      name={field}
+                      value={formData[field]}
+                      onChange={handleChange}
+                      className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                      min="0"
+                      step="any" 
+                      inputMode="decimal"
+                      pattern="[0-9]*"
+                    />
+                  </label>
+                )
+              )}
             </div>
           </section>
 
           {/* Section: Description */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Description</h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Description
+            </h3>
             <label className="block font-medium text-gray-700 mb-2">
               Short Description
               <textarea
@@ -304,27 +330,35 @@ return (
                 className="w-full mt-2 p-3 border border-green-300 rounded-lg min-h-[100px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
               />
             </label>
-          
           </section>
 
           {/* Section: Variations */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Product Variations</h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Product Variations
+            </h3>
             <div className="mb-6">
               <h4 className="text-lg font-medium text-gray-700">Colors</h4>
               {formData.colors.map((color, i) => (
-                <div key={i} className="flex items-center gap-3 my-2 bg-gray-50 rounded-lg p-3">
+                <div
+                  key={i}
+                  className="flex items-center gap-3 my-2 bg-gray-50 rounded-lg p-3"
+                >
                   <input
                     type="text"
                     placeholder="Color Name"
                     value={color.name}
-                    onChange={e => handleColorChange(i, 'name', e.target.value)}
+                    onChange={(e) =>
+                      handleColorChange(i, "name", e.target.value)
+                    }
                     className="input flex-1 rounded-md"
                   />
                   <input
                     type="color"
                     value={color.hex}
-                    onChange={e => handleColorChange(i, 'hex', e.target.value)}
+                    onChange={(e) =>
+                      handleColorChange(i, "hex", e.target.value)
+                    }
                     className="w-10 h-10 rounded-md cursor-pointer border-none"
                   />
                   <button
@@ -362,11 +396,18 @@ return (
 
           {/* Section: Details */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Product Details</h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Product Details
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {Object.entries(formData.details).map(([key]) => (
-                <label key={key} className="block font-medium text-gray-700 mb-2">
-                  {key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase())}
+                <label
+                  key={key}
+                  className="block font-medium text-gray-700 mb-2"
+                >
+                  {key
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (s) => s.toUpperCase())}
                   <input
                     type="text"
                     name={`details.${key}`}
@@ -381,7 +422,12 @@ return (
 
           {/* Section: Additional */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Additional Info <span className="text-base text-green-400">(label:value per line)</span></h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Additional Info{" "}
+              <span className="text-base text-green-400">
+                (label:value per line)
+              </span>
+            </h3>
             <div className="mb-5">
               <label className="block font-medium text-gray-700 mb-2">
                 Material & Washing
@@ -390,7 +436,9 @@ return (
                   value={formData.materialWashing}
                   onChange={handleChange}
                   className="w-full mt-2 p-3 border border-green-300 rounded-lg min-h-[80px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                  placeholder={'e.g.\nMaterial: Cotton\nWash Care: Machine Wash'}
+                  placeholder={
+                    "e.g.\nMaterial: Cotton\nWash Care: Machine Wash"
+                  }
                 />
               </label>
             </div>
@@ -402,7 +450,7 @@ return (
                   value={formData.sizeShape}
                   onChange={handleChange}
                   className="w-full mt-2 p-3 border border-green-300 rounded-lg min-h-[80px] focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                  placeholder={'e.g.\nFit: Slim Fit\nLength: Full-Length'}
+                  placeholder={"e.g.\nFit: Slim Fit\nLength: Full-Length"}
                 />
               </label>
             </div>
@@ -410,15 +458,24 @@ return (
 
           {/* Section: Media */}
           <section>
-            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">Product Media</h3>
+            <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
+              Product Media
+            </h3>
             {mediaGroups.length === 0 && (
-              <div className="text-gray-500 text-sm mb-4">No media added yet. Click "Add Media Group".</div>
+              <div className="text-gray-500 text-sm mb-4">
+                No media added yet. Click "Add Media Group".
+              </div>
             )}
             <div className="space-y-6">
               {mediaGroups.map((group, idx) => (
-                <div key={group.id} className="bg-green-50 border border-green-200 rounded-lg p-5 shadow-sm">
+                <div
+                  key={group.id}
+                  className="bg-green-50 border border-green-200 rounded-lg p-5 shadow-sm"
+                >
                   <div className="flex justify-between items-center mb-3">
-                    <h4 className="font-medium text-gray-800">Media Group #{idx + 1}</h4>
+                    <h4 className="font-medium text-gray-800">
+                      Media Group #{idx + 1}
+                    </h4>
                     <button
                       type="button"
                       onClick={() => removeMediaGroup(group.id)}
@@ -432,15 +489,27 @@ return (
                     type="file"
                     multiple
                     accept="image/*,video/*"
-                    onChange={e => handleMediaFilesChange(group.id, e.target.files)}
+                    onChange={(e) =>
+                      handleMediaFilesChange(group.id, e.target.files)
+                    }
                     className="block w-full bg-white p-2 rounded-md border border-green-300 mb-2"
                   />
                   <div className="flex flex-wrap gap-4 mt-3">
-                    {group.previews.map(preview => 
-                      preview.type === 'image' ? (
-                        <img key={preview.id} src={preview.url} alt="Preview" className="w-28 h-28 object-cover rounded-md border" />
+                    {group.previews.map((preview) =>
+                      preview.type === "image" ? (
+                        <img
+                          key={preview.id}
+                          src={preview.url}
+                          alt="Preview"
+                          className="w-28 h-28 object-cover rounded-md border"
+                        />
                       ) : (
-                        <video key={preview.id} src={preview.url} controls className="w-28 h-28 rounded-md border" />
+                        <video
+                          key={preview.id}
+                          src={preview.url}
+                          controls
+                          className="w-28 h-28 rounded-md border"
+                        />
                       )
                     )}
                   </div>
@@ -456,7 +525,7 @@ return (
               + Add Media Group
             </button>
           </section>
-          
+
           <button
             type="submit"
             className="w-full py-3 mt-6 rounded-lg font-bold bg-green-600 text-white hover:bg-green-700 transition text-lg shadow"

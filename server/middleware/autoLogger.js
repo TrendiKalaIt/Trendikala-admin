@@ -5,9 +5,38 @@ const autoLogger = async (req, res, next) => {
   const changeMethods = ["POST", "PUT", "PATCH", "DELETE"];
   if (!changeMethods.includes(req.method)) return next();
 
+  function getChanges(oldObj, newObj, prefix = "") {
+    const changes = [];
+
+    for (const key in newObj) {
+      const fullKey = prefix ? `${prefix}.${key}` : key;
+      const oldVal = oldObj?.[key];
+      const newVal = newObj[key];
+
+      if (
+        typeof newVal === "object" &&
+        newVal !== null &&
+        !Array.isArray(newVal)
+      ) {
+        changes.push(...getChanges(oldVal || {}, newVal, fullKey));
+      } else if (Array.isArray(newVal)) {
+        if (JSON.stringify(oldVal) !== JSON.stringify(newVal)) {
+          changes.push(
+            `${fullKey}: "${JSON.stringify(oldVal)}" → "${JSON.stringify(
+              newVal
+            )}"`
+          );
+        }
+      } else if (oldVal !== newVal) {
+        changes.push(`${fullKey}: "${oldVal}" → "${newVal}"`);
+      }
+    }
+
+    return changes;
+  }
+
   let oldProduct = null;
 
-  
   if (
     (req.method === "DELETE" ||
       req.method === "PUT" ||
@@ -55,10 +84,18 @@ const autoLogger = async (req, res, next) => {
               details = `Deleted product with ID: ${req.params.id}`;
             }
           } else if (req.method === "PUT" || req.method === "PATCH") {
-            if (oldProduct) {
+            if (res.locals.updatedProduct) {
+              const p = res.locals.updatedProduct;
+              details = JSON.stringify(p, null, 2);
+
+            } else if (oldProduct) {
+              const changes = getChanges(oldProduct, req.body);
+              const changeSummary = changes.length
+                ? changes.join(", ")
+                : "No changes detected";
               details = `Updated product: ${
                 oldProduct.productName || "Unknown Product"
-              } (ID: ${oldProduct._id})`;
+              } (ID: ${oldProduct._id}). Changes: ${changeSummary}`;
             } else {
               details = `Updated product with ID: ${req.params.id}`;
             }

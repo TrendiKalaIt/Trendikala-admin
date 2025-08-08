@@ -188,6 +188,8 @@ exports.editProduct = async (req, res) => {
         .json({ success: false, message: "Product not found" });
     }
 
+     res.locals.updatedProduct = updatedProduct;
+
     res.status(200).json({ success: true, product: updatedProduct });
   } catch (error) {
     console.error("Error updating product:", error);
