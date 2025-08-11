@@ -1,5 +1,7 @@
 // src/App.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Orders from "./pages/Orders";
@@ -18,35 +20,38 @@ import ContactUs from "./pages/ContactUs";
 
 function App() {
   return (
-    <UserProvider>
+    <>
+      <ToastContainer position="top-right" autoClose={3000} />
+      <UserProvider>
 
-      <BrowserRouter>
-        <AutoLogoutHandler />
-        <Routes>
-          {/* Public Route */}
-          <Route path="/login" element={<LoginPage />} />
+        <BrowserRouter>
+          <AutoLogoutHandler />
+          <Routes>
+            {/* Public Route */}
+            <Route path="/login" element={<LoginPage />} />
 
-          {/* Protected Routes */}
-          <Route element={<PrivateRoute />}>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="products" element={<Products />} />
-              <Route path="add-product" element={<AddProduct />} />
-              <Route path="edit-product/:id" element={<EditProduct />} />
+            {/* Protected Routes */}
+            <Route element={<PrivateRoute />}>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="products" element={<Products />} />
+                <Route path="add-product" element={<AddProduct />} />
+                <Route path="edit-product/:id" element={<EditProduct />} />
 
 
-              <Route path="customers" element={<Customers />} />
-              <Route path="logs" element={<Logs />} />
-              <Route path="enquiry" element={<Enquiry />} />
-              <Route path="contactus" element={<ContactUs />} />
+                <Route path="customers" element={<Customers />} />
+                <Route path="logs" element={<Logs />} />
+                <Route path="enquiry" element={<Enquiry />} />
+                <Route path="contactus" element={<ContactUs />} />
 
-              <Route path="settings" element={<Settings />} />
+                <Route path="settings" element={<Settings />} />
+              </Route>
             </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </UserProvider>
+          </Routes>
+        </BrowserRouter>
+      </UserProvider>
+    </>
   );
 }
 

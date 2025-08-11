@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
@@ -36,7 +38,7 @@ const LoginPage = () => {
         navigate("/orders");
       }
     } catch (err) {
-      alert("Invalid credentials");
+      toast.error("Invalid credentials");
     }
   };
 

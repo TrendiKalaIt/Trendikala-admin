@@ -1,6 +1,9 @@
 import React, { useState, useMemo, useEffect } from "react";
 
+
 import axios from "axios";
+import { toast } from "react-toastify";
+
 
 import { Search, ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -139,7 +142,7 @@ const CustomersPageContent = () => {
 
   const handleExportCsv = () => {
     if (filteredCustomers.length === 0) {
-      alert("No data to export.");
+      toast.error("No data to export.");
 
       return;
     }

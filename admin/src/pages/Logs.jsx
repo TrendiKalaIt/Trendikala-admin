@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Trash2 } from "lucide-react";
+import { toast } from "react-toastify";
 
 const Logs = () => {
   const [logs, setLogs] = useState([]);
@@ -73,10 +74,10 @@ const Logs = () => {
         if (res.ok) {
           setLogs((prev) => prev.filter((log) => log._id !== id));
         } else {
-          alert("Failed to delete log");
+          toast.error("Failed to delete log");
         }
       } catch (err) {
-        alert("Error deleting log");
+        toast.error("Error deleting log");
       }
     },
     [setLogs]
@@ -99,10 +100,10 @@ const Logs = () => {
       if (res.ok) {
         setLogs([]);
       } else {
-        alert("Failed to clear logs");
+        toast.error("Failed to clear logs");
       }
     } catch {
-      alert("Error clearing logs");
+      toast.error("Error clearing logs");
     }
   }, []);
 
