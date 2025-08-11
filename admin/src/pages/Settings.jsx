@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Pencil } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -74,13 +76,13 @@ const Settings = () => {
     if (editingField === "email") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        alert("Invalid email format");
+        toast.error("Invalid email format");
         return;
       }
     }
 
     if (editingField === "phone" && formData.phone.length !== 10) {
-      alert("Phone number must be exactly 10 digits");
+       toast.error("Phone number must be exactly 10 digits");
       return;
     }
 
@@ -107,13 +109,13 @@ const Settings = () => {
           phone: data.phone || "",
           role: data.role,
         });
-        alert("Profile updated successfully");
+        toast.success("Profile updated successfully");
       } else {
-        alert(data.message || "Failed to update profile");
+        toast.error(data.message || "Failed to update profile");
       }
     } catch (err) {
       console.error("Error updating profile:", err);
-      alert("Something went wrong");
+      toast.error(data.message || "Something went wrong");
     }
 
     setEditingField(null);
@@ -126,7 +128,7 @@ const Settings = () => {
   const handleChangePasswordSubmit = async (userId) => {
     const newPassword = passwords[userId];
     if (!newPassword || newPassword.length < 6) {
-      alert("Password must be at least 6 characters");
+      toast.error("Password must be at least 6 characters");
       return;
     }
 
@@ -149,14 +151,14 @@ const Settings = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert(`Password changed successfully for user`);
+        toast.success("Password changed successfully for user");
         setPasswords(prev => ({ ...prev, [userId]: "" }));
       } else {
-        alert(data.message || "Failed to change password");
+        toast.error(data.message || "Failed to change password");
       }
     } catch (err) {
       console.error("Error changing password:", err);
-      alert("Something went wrong");
+      toast.error(data.message || "Something went wrong");
     } finally {
       setLoadingIds(prev => prev.filter(id => id !== userId));
     }
@@ -164,6 +166,7 @@ const Settings = () => {
 
   return (
     <div className="p-2 bg-[#f0f5eb] min-h-screen">
+      <ToastContainer />
       <h1 className="text-3xl font-bold text-[#49951C] mb-6">Settings</h1>
 
       <div className="bg-white rounded-lg shadow p-2 grid md:grid-cols-5 gap-2">
