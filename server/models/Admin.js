@@ -5,15 +5,16 @@ const adminSchema = new mongoose.Schema({
   name: { type: String, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
+  phone: { type: String, trim: true },
   role: {
     type: String,
     enum: ['user', 'staff', 'admin', 'superadmin'],
     default: 'user'
   }
-});
+}, { timestamps: true });
 
 // Hash password before saving
-adminSchema.pre('save', async function(next) {
+adminSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 
   try {
@@ -26,7 +27,7 @@ adminSchema.pre('save', async function(next) {
 });
 
 // Method to compare entered password with hashed password
-adminSchema.methods.matchPassword = async function(enteredPassword) {
+adminSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 

@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs')
 const Admin = require("../models/Admin");
 
 
@@ -55,7 +56,7 @@ exports.deleteAdmin = async (req, res) => {
 // GET current admin's profile
 exports.getAdminProfile = async (req, res) => {
   try {
-    res.status(200).json(req.user); 
+    res.status(200).json(req.user);
   } catch (err) {
     res.status(500).json({ message: "Error fetching profile" });
   }
@@ -83,3 +84,39 @@ exports.updateAdminProfile = async (req, res) => {
   }
 };
 
+
+
+// Password reset/change function
+exports.changePassword = async (req, res) => {
+  try {
+    const { userId, newPassword } = req.body;
+    const requester = req.user;
+
+    if (!userId || !newPassword) {
+      return res.status(400).json({ message: 'User ID and new password required' });
+    }
+
+    const userToUpdate = await Admin.findById(userId);
+    if (!userToUpdate) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (requester.role === 'superadmin') {
+      // superadmin can change any password
+    } else if (requester.role === 'admin') {
+      if (requester._id.toString() !== userId) {
+        return res.status(403).json({ message: 'Admins can only change their own password' });
+      }
+    } else {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+
+    userToUpdate.password = newPassword; // plaintext password assign karo
+    await userToUpdate.save();           // pre('save') hook automatically hash karega
+
+    return res.json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Password change error:', error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};

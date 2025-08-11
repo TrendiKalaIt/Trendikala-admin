@@ -1,77 +1,66 @@
 import React, { useState, useEffect } from "react";
-import { Pencil, Trash2, Upload } from "lucide-react";
-
+import { Pencil } from "lucide-react";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
   const [editingField, setEditingField] = useState(null);
   const [formData, setFormData] = useState({});
+  const [allUsers, setAllUsers] = useState([]);
+  const [passwords, setPasswords] = useState({});  // userId => newPassword
+  const [loadingIds, setLoadingIds] = useState([]); // loading for each user password change
 
-
-  
-  const [allUsers, setAllUsers] = useState([]); 
-
- useEffect(() => {
-  const fetchProfile = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
-  headers: {
-    Authorization: `Bearer ${token}`,
-  },
-});
-
-      const data = await res.json();
-      if (res.ok) {
-        setFormData({
-          name: data.name,
-          email: data.email,
-          phone: data.phone || "",
-          role: data.role,
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
+
+        const data = await res.json();
+        if (res.ok) {
+          setFormData({
+            name: data.name,
+            email: data.email,
+            phone: data.phone || "",
+            role: data.role,
+          });
+        }
+      } catch (err) {
+        console.error("Failed to load profile:", err);
       }
-    } catch (err) {
-      console.error("Failed to load profile:", err);
-    }
-  };
+    };
 
-  fetchProfile();
-}, []);
+    fetchProfile();
+  }, []);
 
-useEffect(() => {
-  const fetchAllAdmins = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  useEffect(() => {
+    const fetchAllAdmins = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      const data = await res.json();
-      if (res.ok) {
-        setAllUsers(data);
-      } else {
-        console.error("Failed to fetch admin users:", data.message);
+        const data = await res.json();
+        if (res.ok) {
+          setAllUsers(data);
+        } else {
+          console.error("Failed to fetch admin users:", data.message);
+        }
+      } catch (err) {
+        console.error("Error fetching admin users:", err);
       }
-    } catch (err) {
-      console.error("Error fetching admin users:", err);
+    };
+
+    if (formData?.role?.toLowerCase() === "superadmin") {
+      fetchAllAdmins();
     }
-  };
-
-  
-  if (formData?.role?.toLowerCase() === "superadmin") {
-    fetchAllAdmins();
-  }
-}, [formData.role]); 
-
-
-
-
-
-  
-
-
+  }, [formData.role]);
 
   const handleEditClick = (field) => setEditingField(field);
 
@@ -81,57 +70,97 @@ useEffect(() => {
     setFormData({ ...formData, [name]: value });
   };
 
- const handleSave = async () => {
-  if (editingField === "email") {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      alert("Invalid email format");
+  const handleSave = async () => {
+    if (editingField === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        alert("Invalid email format");
+        return;
+      }
+    }
+
+    if (editingField === "phone" && formData.phone.length !== 10) {
+      alert("Phone number must be exactly 10 digits");
       return;
     }
-  }
 
-  if (editingField === "phone" && formData.phone.length !== 10) {
-    alert("Phone number must be exactly 10 digits");
-    return;
-  }
-
-  try {
-    const token = localStorage.getItem("token");
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-      }),
-    });
-
-    const data = await res.json();
-    if (res.ok) {
-      setFormData({
-        name: data.name,
-        email: data.email,
-        phone: data.phone || "",
-        role: data.role,
+    try {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/profile`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+        }),
       });
-      alert("Profile updated successfully");
-    } else {
-      alert(data.message || "Failed to update profile");
+
+      const data = await res.json();
+      if (res.ok) {
+        setFormData({
+          name: data.name,
+          email: data.email,
+          phone: data.phone || "",
+          role: data.role,
+        });
+        alert("Profile updated successfully");
+      } else {
+        alert(data.message || "Failed to update profile");
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+      alert("Something went wrong");
     }
-  } catch (err) {
-    console.error("Error updating profile:", err);
-    alert("Something went wrong");
-  }
 
-  setEditingField(null);
-};
+    setEditingField(null);
+  };
 
+  const handlePasswordChange = (userId, value) => {
+    setPasswords(prev => ({ ...prev, [userId]: value }));
+  };
 
-  
+  const handleChangePasswordSubmit = async (userId) => {
+    const newPassword = passwords[userId];
+    if (!newPassword || newPassword.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+
+    try {
+      setLoadingIds(prev => [...prev, userId]);
+
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/admins/change-password`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          userId,
+          newPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`Password changed successfully for user`);
+        setPasswords(prev => ({ ...prev, [userId]: "" }));
+      } else {
+        alert(data.message || "Failed to change password");
+      }
+    } catch (err) {
+      console.error("Error changing password:", err);
+      alert("Something went wrong");
+    } finally {
+      setLoadingIds(prev => prev.filter(id => id !== userId));
+    }
+  };
 
   return (
     <div className="p-2 bg-[#f0f5eb] min-h-screen">
@@ -160,7 +189,7 @@ useEffect(() => {
                     : "text-gray-600 hover:text-[#3a4d39]"
                 }`}
               >
-               Users Details
+                Users Details
               </button>
             )}
           </div>
@@ -173,11 +202,8 @@ useEffect(() => {
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
                   <h2>User Profile</h2>
-                  
                 </div>
               </div>
-
-             
 
               <div className="space-y-6">
                 {[
@@ -237,17 +263,33 @@ useEffect(() => {
                     <tr className="bg-[#f0f0f0] text-left">
                       <th className="p-2 border">Name</th>
                       <th className="p-2 border">Email</th>
-                      <th className="p-2 border">Phone</th>
                       <th className="p-2 border">Role</th>
+                      <th className="p-2 border">Change Password</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {allUsers.map((user, idx) => (
-                      <tr key={idx} className="hover:bg-gray-50">
+                    {allUsers.map((user) => (
+                      <tr key={user._id} className="hover:bg-gray-50">
                         <td className="p-2 border">{user.name}</td>
                         <td className="p-2 border">{user.email}</td>
-                        <td className="p-2 border">{user.phone}</td>
                         <td className="p-2 border">{user.role}</td>
+                        <td className="p-2 border-b border-t flex">
+                          <input
+                            type="password"
+                            placeholder="New Password"
+                            value={passwords[user._id] || ""}
+                            onChange={(e) => handlePasswordChange(user._id, e.target.value)}
+                            className="border px-2 py-3  mr-2 rounded"
+                            disabled={loadingIds.includes(user._id)}
+                          />
+                          <button
+                            onClick={() => handleChangePasswordSubmit(user._id)}
+                            disabled={loadingIds.includes(user._id)}
+                            className="bg-green-600 text-white px-3 py-1 rounded disabled:opacity-50"
+                          >
+                            Change
+                          </button>
+                        </td>
                       </tr>
                     ))}
                   </tbody>
