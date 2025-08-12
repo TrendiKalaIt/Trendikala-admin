@@ -1,4 +1,4 @@
-// scripts/seedUsers.js
+
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const Admin = require('../models/Admin');
@@ -30,11 +30,11 @@ const seedUsers = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log(' Connected to MongoDB');
 
-    // Optional: Clear existing users
+    
     await Admin.deleteMany({});
     console.log('  Deleted existing users');
 
-    // Insert seed users
+
     await Admin.insertMany(users);
     console.log(' Seed users added');
 

@@ -1,6 +1,6 @@
 const ContactMessage = require("../models/ContactMessage");
 
-// GET all contact messages
+
 exports.getAllMessages = async (req, res) => {
   try {
     const messages = await ContactMessage.find().sort({ createdAt: -1 });

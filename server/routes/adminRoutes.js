@@ -15,7 +15,7 @@ const { protect, authorizeRoles } = require("../middleware/roleMiddleware");
 
 router.get("/profile", protect, getAdminProfile);
 router.put("/profile", protect, updateAdminProfile);
-// Only superadmin can perform these actions
+
 router.get("/", protect, authorizeRoles("superadmin"), getAllAdmins);
 router.get("/:id", protect, authorizeRoles("superadmin"), getAdminById);
 router.put("/:id", protect, authorizeRoles("superadmin"), updateAdmin);

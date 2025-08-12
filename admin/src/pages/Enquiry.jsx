@@ -10,7 +10,7 @@ const Enquiry = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
 
-  // Fetch Enquiries
+ 
   const fetchEnquiries = async () => {
     try {
       const { data } = await axios.get(`${API_URL}/api/enquiries`);
@@ -26,7 +26,7 @@ const Enquiry = () => {
     fetchEnquiries();
   }, []);
 
-  // Delete
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this enquiry?")) {
       try {
@@ -38,24 +38,24 @@ const Enquiry = () => {
     }
   };
 
-  // View in Modal & mark as read
+  
   const handleView = async (enquiry) => {
     setSelectedEnquiry(enquiry);
 
-    // Mark as read in backend
-    if (!enquiry.isRead) {
-      try {
-        await axios.patch(`${API_URL}/api/enquiries/${enquiry._id}/read`);
-        setEnquiries((prev) =>
-          prev.map((e) => (e._id === enquiry._id ? { ...e, isRead: true } : e))
-        );
-      } catch (err) {
-        console.error("Error marking as read:", err);
-      }
-    }
+    
+    // if (!enquiry.isRead) {
+    //   try {
+    //     await axios.patch(`${API_URL}/api/enquiries/${enquiry._id}/read`);
+    //     setEnquiries((prev) =>
+    //       prev.map((e) => (e._id === enquiry._id ? { ...e, isRead: true } : e))
+    //     );
+    //   } catch (err) {
+    //     console.error("Error marking as read:", err);
+    //   }
+    // }
   };
 
-  // Search filter
+  
   const filteredEnquiries = enquiries.filter(
     (enq) =>
       enq.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -82,7 +82,7 @@ const Enquiry = () => {
         </div>
       </div>
 
-      {/* Table */}
+     
       <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="bg-[#A2D286] text-gray-700">

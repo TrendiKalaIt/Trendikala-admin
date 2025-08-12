@@ -66,14 +66,14 @@ const Orders = () => {
     const updated = [...orders];
     const orderId = updated[index].id.replace("#ORD", "");
 
-    // Step 1: Optimistic UI update
+    
     updated[index][field] = value;
     setOrders(updated);
 
     try {
       const token = localStorage.getItem("token");
 
-      // Step 2: Send update to backend
+      
       await axios.put(
         `${import.meta.env.VITE_API_BASE_URL}/api/orders/${orderId}/status`,
         { orderStatus: value },
@@ -84,12 +84,12 @@ const Orders = () => {
         }
       );
 
-      // Optional: show success message
+      
       console.log("Order status updated in backend");
     } catch (err) {
       console.error("Failed to update order status", err);
 
-      // Rollback UI if needed
+      
       const reverted = [...orders];
       reverted[index][field] = orders[index][field];
       setOrders(reverted);
@@ -224,9 +224,7 @@ const Orders = () => {
                   </td>
                   <td className="px-3 py-2">{order.date}</td>
                   <td className="px-3 py-2">
-                    {/* {order.isGuest
-                      ? `Guest`
-                      : `Registered`} */}
+                    
                       {order.customer}
                   </td>
                   <td className="px-3 py-2">{order.paymentStatus}</td>

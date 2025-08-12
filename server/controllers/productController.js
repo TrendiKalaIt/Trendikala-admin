@@ -56,7 +56,7 @@ exports.addProduct = async (req, res) => {
         .json({ success: false, message: "productName and category required" });
     }
 
-    // Parse JSON fields
+ 
     const detailedDesc = tryParseJSON(detailedDescription);
     const parsedColors = tryParseJSON(colors);
     const parsedSizes = tryParseJSON(sizes);
@@ -155,7 +155,7 @@ exports.editProduct = async (req, res) => {
       materialWashing: tryParseJSON(req.body.materialWashing),
       sizeShape: tryParseJSON(req.body.sizeShape),
       stock: Number(req.body.stock),
-    }; // Optional: Upload new thumbnail or media
+    }; 
 
     const mediaFiles = req.files?.media || [];
     const thumbnailFile = req.files?.thumbnail?.[0];

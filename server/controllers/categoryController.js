@@ -1,7 +1,7 @@
 
 const Category = require('../models/Category');
 
-// Get all categories
+
 const getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find().sort({ name: 1 });
@@ -12,7 +12,7 @@ const getAllCategories = async (req, res) => {
   }
 };
 
-// Create a new category (admin only)
+
 const createCategory = async (req, res) => {
   try {
     const { name } = req.body;

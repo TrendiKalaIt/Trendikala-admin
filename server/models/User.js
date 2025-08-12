@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
   profileImage: { type: String, default: "" },
   addresses: [addressSchema],
   createdAt: { type: Date, default: Date.now },
-  //for reset password 
+  
   resetPasswordToken: String,
   resetPasswordExpires: Date,
 

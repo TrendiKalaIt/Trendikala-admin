@@ -34,7 +34,7 @@ const AddProduct = () => {
     stock: "",
   });
 
-  // Array of media file groups: each group is { id, files: [File], previews: [{id,url,type}] }
+  
   const [mediaGroups, setMediaGroups] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -60,9 +60,9 @@ const AddProduct = () => {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
-    // Validation: Allow only numeric values (empty or valid number)
+    
     if (type === "number" && value !== "" && isNaN(value)) {
-      return; // Invalid input, ignore it
+      return;
     }
 
     if (name.includes(".")) {

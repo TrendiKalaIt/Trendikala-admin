@@ -37,7 +37,7 @@ const EditProduct = ({ onSuccess }) => {
         stock: '',
     });
 
-    // Media format: [{ id, url, file (optional), type:image|video }]
+    
     const [mediaGroups, setMediaGroups] = useState([]);
 
     const [categories, setCategories] = useState([]);
@@ -45,7 +45,7 @@ const EditProduct = ({ onSuccess }) => {
     const [loadingProduct, setLoadingProduct] = useState(true);
 
     useEffect(() => {
-        // Fetch categories
+      
         const fetchCategories = async () => {
             setLoadingCategories(true);
             try {
@@ -65,7 +65,7 @@ const EditProduct = ({ onSuccess }) => {
 
     useEffect(() => {
         if (!id) return;
-        // Fetch product data by id
+        
         const fetchProduct = async () => {
             setLoadingProduct(true);
             try {
@@ -75,7 +75,7 @@ const EditProduct = ({ onSuccess }) => {
                 });
                 const product = res.data;
 
-                // Normalize and set form data
+                
                 setFormData({
                     productName: product.productName || '',
                     category: product.category || '',
@@ -107,12 +107,12 @@ const EditProduct = ({ onSuccess }) => {
                     stock: product.stock || '',
                 });
 
-                // Setup media groups from product.media array as single group for edit
+                
                 if (product.media && Array.isArray(product.media) && product.media.length > 0) {
                     setMediaGroups([
                         {
                             id: uuidv4(),
-                            files: [], // empty because existing files are URLs, not local File objects
+                            files: [], 
                             previews: product.media.map((m) => ({
                                 id: uuidv4(),
                                 url: m.url,
@@ -226,7 +226,7 @@ const EditProduct = ({ onSuccess }) => {
                 }
             }
 
-            // Append all media files from all groups
+            
             mediaGroups.forEach((group) => {
                 group.files.forEach((file) => {
                     data.append('media', file);
@@ -320,7 +320,7 @@ const EditProduct = ({ onSuccess }) => {
                         </div>
                     </section>
 
-                    {/* Pricing & Stock */}
+                   
                     <section>
                         <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
                             Pricing & Stock

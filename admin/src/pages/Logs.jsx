@@ -11,7 +11,7 @@ const Logs = () => {
 
   const logsPerPage = 10;
 
-  // Fetch logs from API
+  
   const fetchLogs = useCallback(async () => {
     setLoading(true);
     setError(null);
@@ -43,7 +43,7 @@ const Logs = () => {
     fetchLogs();
   }, [fetchLogs]);
 
-  // Check if string is valid JSON
+  
   const isValidJSON = (str) => {
     try {
       JSON.parse(str);
@@ -53,7 +53,7 @@ const Logs = () => {
     }
   };
 
-  // Delete single log
+  
   const deleteLog = useCallback(
     async (id) => {
       if (!window.confirm("Are you sure you want to delete this log?")) return;
@@ -83,7 +83,7 @@ const Logs = () => {
     [setLogs]
   );
 
-  // Clear all logs
+  
   const clearAllLogs = useCallback(async () => {
     if (!window.confirm("Are you sure you want to clear ALL logs?")) return;
 
@@ -107,7 +107,7 @@ const Logs = () => {
     }
   }, []);
 
-  // Filter logs by search term
+ 
   const filteredLogs = useMemo(() => {
     if (!searchTerm.trim()) return logs;
     const term = searchTerm.toLowerCase();
@@ -119,7 +119,7 @@ const Logs = () => {
     );
   }, [logs, searchTerm]);
 
-  // Pagination logic
+  
   const totalPages = Math.ceil(filteredLogs.length / logsPerPage);
   const currentLogs = filteredLogs.slice(
     (currentPage - 1) * logsPerPage,
@@ -135,7 +135,7 @@ const Logs = () => {
     [totalPages]
   );
 
-  // Format date/time display
+  
   const formatDateTime = (timestamp) => {
     const date = new Date(timestamp);
     return {
@@ -152,7 +152,7 @@ const Logs = () => {
     };
   };
 
-  // Component: Single log row
+  
   const LogRow = ({ log, index }) => {
     const { date, time } = formatDateTime(log.timestamp);
     return (
@@ -194,7 +194,7 @@ const Logs = () => {
     );
   };
 
-  // Component: Search bar + Clear button
+  
   const SearchBar = () => (
     <div className="flex gap-2 flex-wrap justify-end items-center w-full sm:w-auto">
       <input
@@ -221,7 +221,7 @@ const Logs = () => {
     </div>
   );
 
-  // Component: Pagination controls
+  
   const Pagination = () => {
     if (totalPages <= 1) return null;
 

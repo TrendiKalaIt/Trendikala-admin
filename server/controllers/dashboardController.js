@@ -11,7 +11,7 @@ exports.getDashboardRevenue = async (req, res) => {
     ]);
     const totalRevenue = paidAgg[0]?.totalRevenue || 0;
 
-    // 2. Expected Revenue: Unpaid + Not Cancelled
+    // 3.Expected Revenue: Unpaid + Not Cancelled
     const expectedAgg = await Order.aggregate([
       {
         $match: {
@@ -23,13 +23,13 @@ exports.getDashboardRevenue = async (req, res) => {
     ]);
     const expectedRevenue = expectedAgg[0]?.expectedRevenue || 0;
 
-    // 3. Total Orders
+    // 2. Total Orders
     const totalOrders = await Order.countDocuments();
 
     // 4. Total Products
     const totalProducts = await Product.countDocuments();
 
-    // 5. Chart Data: Daily order count
+    // 5. Chart Data
     const chartData = await Order.aggregate([
       {
         $group: {

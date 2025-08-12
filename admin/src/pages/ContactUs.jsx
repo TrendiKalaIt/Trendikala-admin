@@ -9,7 +9,7 @@ const Contact = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch messages from backend
+  
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -99,7 +99,7 @@ const Contact = () => {
         </table>
       </div>
 
-      {/* Modal */}
+      {/* Message Details Modal */}
       {selectedMessage && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-lg relative">

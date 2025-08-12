@@ -7,7 +7,7 @@ const {
   clearLogs,
 } = require("../controllers/logController");
 
-// Routes
+
 router.get("/", getLogs);
 router.post("/", createLog);
 router.delete("/:id", deleteLog);

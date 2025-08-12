@@ -8,8 +8,8 @@ const Settings = () => {
   const [editingField, setEditingField] = useState(null);
   const [formData, setFormData] = useState({});
   const [allUsers, setAllUsers] = useState([]);
-  const [passwords, setPasswords] = useState({});  // userId => newPassword
-  const [loadingIds, setLoadingIds] = useState([]); // loading for each user password change
+  const [passwords, setPasswords] = useState({});  
+  const [loadingIds, setLoadingIds] = useState([]); 
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -170,7 +170,7 @@ const Settings = () => {
       <h1 className="text-3xl font-bold text-[#49951C] mb-6">Settings</h1>
 
       <div className="bg-white rounded-lg shadow p-2 grid md:grid-cols-5 gap-2">
-        {/* Sidebar Tabs */}
+        
         <div className="col-span-1 border-r">
           <div className="space-y-4">
             <button
@@ -198,7 +198,7 @@ const Settings = () => {
           </div>
         </div>
 
-        {/* Main Content */}
+        
         <div className="col-span-4 p-4">
           {activeTab === "general" && (
             <>

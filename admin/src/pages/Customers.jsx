@@ -274,7 +274,7 @@ const CustomersPageContent = () => {
           </table>
         </div>
 
-        {/* Pagination */}
+      
 
         {totalPages >= 1 && (
           <div className="flex justify-center items-center mt-8 space-x-2">
