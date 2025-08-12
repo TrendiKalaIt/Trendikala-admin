@@ -9,7 +9,7 @@ const Logs = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const logsPerPage = 10;
+  const logsPerPage = 20;
 
   
   const fetchLogs = useCallback(async () => {

@@ -35,14 +35,14 @@ const getOrderByOrderId = async (req, res) => {
   }
 };
 
-// Update order status
+
 
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId } = req.params;
     const { orderStatus } = req.body;
 
-    // Check if trying to update Delivered or Cancelled order again
+  
     const existingOrder = await Order.findOne({ orderId: orderId });
     if (!existingOrder) {
       return res.status(404).json({ message: 'Order not found' });
@@ -51,7 +51,7 @@ const updateOrderStatus = async (req, res) => {
       return res.status(400).json({ message: 'Cannot update a delivered or cancelled order' });
     }
 
-    // Prepare update object
+   
     const updateFields = { orderStatus };
 
     if (orderStatus === 'Delivered') {
