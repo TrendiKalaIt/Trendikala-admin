@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Eye, EyeOff } from "lucide-react";
+import logo from '../assets/images/trendikala_logo_bg.png'; 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -19,21 +19,14 @@ const LoginPage = () => {
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-        {
-          email,
-          password,
-        }
+        { email, password }
       );
 
       const { token, user } = res.data;
-
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
 
-      setUser({
-        ...user,
-        isAuthenticated: true,
-      });
+      setUser({ ...user, isAuthenticated: true });
 
       if (user.role === "superadmin") {
         navigate("/");
@@ -47,45 +40,56 @@ const LoginPage = () => {
 
   return (
     <div className="h-screen flex justify-center items-center bg-[#93A87E]">
-      <form
-        onSubmit={handleLogin}
-        className="bg-white p-8 rounded-2xl shadow-lg w-96 border-t-8 border-[#49951C]"
-      >
-        <h2 className="text-3xl font-bold mb-6 text-center text-[#49951C]">
-          Admin Login
-        </h2>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full p-3 border border-[#93A87E] rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <div className="relative mb-6">
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Password"
-            className="w-full p-3 pr-10 border border-[#93A87E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
+      <div className="bg-white flex rounded-2xl shadow-lg w-[700px] overflow-hidden border-t-8 border-[#49951C]">
+        
+        {/* LEFT SIDE - Logo & Line */}
+        <div className="flex flex-col justify-center items-center bg-[#f9f9f9] p-6 w-1/3">
+          <img
+          src={logo} 
+            alt="Logo"
+            className="w-56 h-42 "
           />
-          <div
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
-            onClick={() => setShowPassword((prev) => !prev)}
-          >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-          </div>
+          <div className="w-full border-r border-gray-300"></div>
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"
-        >
-          Login
-        </button>
-      </form>
+        {/* RIGHT SIDE - Login Form */}
+        <form onSubmit={handleLogin} className="p-8 w-2/3">
+          <h2 className="text-3xl font-bold mb-6 text-center text-[#49951C]">
+            Admin Login
+          </h2>
+          <input
+            type="email"
+            placeholder="Email"
+            className="w-full p-3 border border-[#93A87E] rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className="relative mb-6">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              className="w-full p-3 pr-10 border border-[#93A87E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <div
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
