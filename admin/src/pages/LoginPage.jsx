@@ -4,10 +4,13 @@ import { toast } from "react-toastify";
 
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
+import { Eye, EyeOff } from "lucide-react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
   const { setUser } = useUser();
 
@@ -59,14 +62,23 @@ const LoginPage = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input
-          type="password"
-          placeholder="Password"
-          className="w-full p-3 border border-[#93A87E] rounded-md mb-6 focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+        <div className="relative mb-6">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            className="w-full p-3 pr-10 border border-[#93A87E] rounded-md focus:outline-none focus:ring-2 focus:ring-[#A2D286]"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <div
+            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </div>
+        </div>
+
         <button
           type="submit"
           className="w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"

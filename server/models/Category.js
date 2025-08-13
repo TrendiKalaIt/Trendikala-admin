@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 
 const categorySchema = new mongoose.Schema({
+  categoryCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
   name: { type: String, required: true, unique: true, trim: true },
   description: { type: String },
   slug: { type: String, unique: true, lowercase: true },

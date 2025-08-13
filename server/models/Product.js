@@ -6,6 +6,7 @@ const mediaSchema = new mongoose.Schema({
 }, { _id: false });
 
 const productSchema = new mongoose.Schema({
+  productCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
   productName: { type: String, required: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   brand: String,

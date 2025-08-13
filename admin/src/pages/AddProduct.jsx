@@ -10,6 +10,7 @@ const AddProduct = () => {
   const [formData, setFormData] = useState({
     productName: "",
     category: "",
+    productCode: "",
     brand: "",
     price: "",
     discountPrice: "",
@@ -34,7 +35,6 @@ const AddProduct = () => {
     stock: "",
   });
 
-  
   const [mediaGroups, setMediaGroups] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -60,7 +60,6 @@ const AddProduct = () => {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
-    
     if (type === "number" && value !== "" && isNaN(value)) {
       return;
     }
@@ -188,6 +187,7 @@ const AddProduct = () => {
       setFormData({
         productName: "",
         category: "",
+        productCode: "",
         brand: "",
         price: "",
         discountPrice: "",
@@ -239,6 +239,19 @@ const AddProduct = () => {
                     type="text"
                     name="productName"
                     value={formData.productName}
+                    onChange={handleChange}
+                    required
+                    className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
+                  />
+                </label>
+              </div>
+              <div>
+                <label className="block font-medium text-gray-700 mb-2">
+                  Product Code <span className="text-red-500">*</span>
+                  <input
+                    type="text"
+                    name="productCode"
+                    value={formData.productCode}
                     onChange={handleChange}
                     required
                     className="w-full mt-2 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
@@ -306,7 +319,7 @@ const AddProduct = () => {
                       onChange={handleChange}
                       className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
                       min="0"
-                      step="any" 
+                      step="any"
                       inputMode="decimal"
                       pattern="[0-9]*"
                     />

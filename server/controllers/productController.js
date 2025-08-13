@@ -36,6 +36,7 @@ exports.addProduct = async (req, res) => {
     const {
       productName,
       category,
+      productCode,
       brand,
       price,
       discountPrice,
@@ -91,6 +92,7 @@ exports.addProduct = async (req, res) => {
     const productData = {
       productName,
       category,
+      productCode,
       brand,
       price,
       discountPrice,
@@ -142,6 +144,7 @@ exports.editProduct = async (req, res) => {
 
     const updatedFields = {
       productName: req.body.productName,
+      productCode: req.body.productCode,
       category: req.body.category,
       brand: req.body.brand,
       price: req.body.price,

@@ -38,7 +38,7 @@ const Orders = () => {
         const backendOrders = res.data.orders || res.data;
 
         const mapped = backendOrders.map((order) => ({
-          id: `#ORD${order.orderId}`,
+          id: `${order.orderId}`,
           date: new Date(order.createdAt).toLocaleString(),
           customer: order.user?.name || order.shippingInfo?.fullName || "Guest",
           paymentStatus:
@@ -217,10 +217,11 @@ const Orders = () => {
                   <td
                     className="px-3 py-2 text-blue-600 font-medium cursor-pointer underline"
                     onClick={() =>
-                      handleOrderClick(order.id.replace("#ORD", ""))
+                      handleOrderClick(order.id.replace("", ""))
                     }
                   >
                     {order.id}
+                    
                   </td>
                   <td className="px-3 py-2">{order.date}</td>
                   <td className="px-3 py-2">
