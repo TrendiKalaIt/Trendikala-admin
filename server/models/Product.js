@@ -12,16 +12,22 @@ const productSchema = new mongoose.Schema({
   brand: String,
   media: [mediaSchema],
   thumbnail: String,
-  price: Number,
-  discountPrice: Number,
-  discountPercent: Number,
   description: String,
   detailedDescription: {
     paragraph1: String,
     paragraph2: String,
   },
-  colors: [ { name: String, hex: String } ],
-  sizes: [String],
+
+  colors: [{ name: String, hex: String }],
+
+  // Size-wise pricing & stock
+  sizes: [{
+    size: { type: String, required: true },          
+    price: { type: Number, required: true },         
+    discountPrice: { type: Number },                  
+    stock: { type: Number, required: true, default: 0 } 
+  }],
+
   details: {
     fabric: String,
     fitType: String,
@@ -33,17 +39,20 @@ const productSchema = new mongoose.Schema({
     countryOfOrigin: String,
     deliveryReturns: String,
   },
-  materialWashing: [ { label: String, value: String } ],
-  sizeShape: [ { label: String, value: String } ],
- stock: {
-  type: Number,
-  default: 0,
-  validate: {
-    validator: Number.isInteger,
-    message: '{VALUE} is not an integer value for stock',
-  },
-}
+
+  materialWashing: [{ label: String, value: String }],
+  sizeShape: [{ label: String, value: String }],
 
 }, { timestamps: true });
 
-module.exports = mongoose.model('Product', productSchema);
+// Virtual field: product in stock if any size has stock
+productSchema.virtual('inStock').get(function () {
+  return this.sizes.some(s => s.stock > 0);
+});
+
+// Ensure virtual fields are serialized
+productSchema.set('toObject', { virtuals: true });
+productSchema.set('toJSON', { virtuals: true });
+
+const Product = mongoose.model('Product', productSchema);
+module.exports = Product;

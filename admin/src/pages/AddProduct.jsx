@@ -12,13 +12,10 @@ const AddProduct = () => {
     category: "",
     productCode: "",
     brand: "",
-    price: "",
-    discountPrice: "",
-    discountPercent: "",
     description: "",
     detailedDescription: { paragraph1: "", paragraph2: "" },
     colors: [],
-    sizes: "",
+    sizes: [], // now array of objects with size, price, discountPrice, discountPercent, stock
     details: {
       fabric: "",
       fitType: "",
@@ -32,13 +29,13 @@ const AddProduct = () => {
     },
     materialWashing: "",
     sizeShape: "",
-    stock: "",
   });
 
   const [mediaGroups, setMediaGroups] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
 
+  // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -57,12 +54,11 @@ const AddProduct = () => {
     fetchCategories();
   }, []);
 
+  // General input handler
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
-    if (type === "number" && value !== "" && isNaN(value)) {
-      return;
-    }
+    if (type === "number" && value !== "" && isNaN(value)) return;
 
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
@@ -75,6 +71,7 @@ const AddProduct = () => {
     }
   };
 
+  // Colors
   const handleColorChange = (index, key, value) => {
     const updatedColors = [...formData.colors];
     updatedColors[index] = { ...updatedColors[index], [key]: value };
@@ -93,7 +90,29 @@ const AddProduct = () => {
     setFormData({ ...formData, colors: updatedColors });
   };
 
-  // When user selects files in one media group input
+  // Sizes
+  const handleSizeChange = (index, key, value) => {
+    const updatedSizes = [...formData.sizes];
+    updatedSizes[index] = { ...updatedSizes[index], [key]: value };
+    setFormData({ ...formData, sizes: updatedSizes });
+  };
+
+  const addSize = () => {
+    setFormData((prev) => ({
+      ...prev,
+      sizes: [
+        ...prev.sizes,
+        { size: "", price: "", discountPrice: "", discountPercent: "", stock: "" },
+      ],
+    }));
+  };
+
+  const removeSize = (index) => {
+    const updatedSizes = formData.sizes.filter((_, i) => i !== index);
+    setFormData({ ...formData, sizes: updatedSizes });
+  };
+
+  // Media
   const handleMediaFilesChange = (groupId, files) => {
     const updatedGroups = mediaGroups.map((group) => {
       if (group.id === groupId) {
@@ -103,11 +122,7 @@ const AddProduct = () => {
           url: URL.createObjectURL(file),
           type: file.type.startsWith("image/") ? "image" : "video",
         }));
-        return {
-          ...group,
-          files: newFiles,
-          previews: newPreviews,
-        };
+        return { ...group, files: newFiles, previews: newPreviews };
       }
       return group;
     });
@@ -115,10 +130,7 @@ const AddProduct = () => {
   };
 
   const addMediaGroup = () => {
-    setMediaGroups((prev) => [
-      ...prev,
-      { id: uuidv4(), files: [], previews: [] },
-    ]);
+    setMediaGroups((prev) => [...prev, { id: uuidv4(), files: [], previews: [] }]);
   };
 
   const removeMediaGroup = (groupId) => {
@@ -133,6 +145,7 @@ const AddProduct = () => {
     });
   };
 
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -148,17 +161,7 @@ const AddProduct = () => {
         const value = formData[key];
         if (typeof value === "object" && !Array.isArray(value)) {
           data.append(key, JSON.stringify(value));
-        } else if (key === "sizes") {
-          data.append(
-            key,
-            JSON.stringify(
-              value
-                .split(",")
-                .map((s) => s.trim())
-                .filter(Boolean)
-            )
-          );
-        } else if (key === "colors") {
+        } else if (key === "sizes" || key === "colors") {
           data.append(key, JSON.stringify(value));
         } else if (key === "materialWashing" || key === "sizeShape") {
           data.append(key, JSON.stringify(formatArrayFromTextarea(value)));
@@ -167,11 +170,9 @@ const AddProduct = () => {
         }
       }
 
-      // Append all media files from all groups
+      // Append media files
       mediaGroups.forEach((group) => {
-        group.files.forEach((file) => {
-          data.append("media", file);
-        });
+        group.files.forEach((file) => data.append("media", file));
       });
 
       const token = localStorage.getItem("token");
@@ -183,19 +184,16 @@ const AddProduct = () => {
       });
 
       toast.success("Product added successfully!");
-      // Reset form if needed
+      // Reset form
       setFormData({
         productName: "",
         category: "",
         productCode: "",
         brand: "",
-        price: "",
-        discountPrice: "",
-        discountPercent: "",
         description: "",
         detailedDescription: { paragraph1: "", paragraph2: "" },
         colors: [],
-        sizes: "",
+        sizes: [],
         details: {
           fabric: "",
           fitType: "",
@@ -209,7 +207,6 @@ const AddProduct = () => {
         },
         materialWashing: "",
         sizeShape: "",
-        stock: "",
       });
       setMediaGroups([]);
     } catch (err) {
@@ -226,7 +223,7 @@ const AddProduct = () => {
           Add New Product
         </h2>
         <form onSubmit={handleSubmit} className="space-y-10">
-          {/* Section: General Information */}
+          {/* General Info */}
           <section>
             <h3 className="text-xl font-semibold text-green-400 border-l-4 border-green-400 pl-4 mb-5">
               General Information
@@ -296,37 +293,58 @@ const AddProduct = () => {
             </div>
           </section>
 
-          {/* Section: Pricing & Stock */}
+          {/* Sizes Section */}
           <section>
             <h3 className="text-xl font-semibold text-green-700 border-l-4 border-green-400 pl-4 mb-5">
-              Pricing & Stock
+              Sizes & Pricing
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-              {["price", "discountPrice", "discountPercent", "stock"].map(
-                (field) => (
-                  <label
-                    key={field}
-                    htmlFor={field}
-                    className="block font-medium text-gray-700 mb-2"
-                  >
-                    {field.charAt(0).toUpperCase() +
-                      field.slice(1).replace(/([A-Z])/g, " $1")}
-                    <input
-                      id={field}
-                      type="number"
-                      name={field}
-                      value={formData[field]}
-                      onChange={handleChange}
-                      className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                      min="0"
-                      step="any"
-                      inputMode="decimal"
-                      pattern="[0-9]*"
-                    />
-                  </label>
-                )
-              )}
-            </div>
+            {formData.sizes.map((s, idx) => (
+              <div key={idx} className="grid grid-cols-1 sm:grid-cols-5 gap-4 mb-3">
+                <input
+                  type="text"
+                  placeholder="Size (S, M, L...)"
+                  value={s.size}
+                  onChange={(e) => handleSizeChange(idx, "size", e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                  type="number"
+                  placeholder="Price"
+                  value={s.price}
+                  onChange={(e) => handleSizeChange(idx, "price", e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <input
+                  type="number"
+                  placeholder="Discount Price"
+                  value={s.discountPrice}
+                  onChange={(e) => handleSizeChange(idx, "discountPrice", e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                />
+              
+                <input
+                  type="number"
+                  placeholder="Stock"
+                  value={s.stock}
+                  onChange={(e) => handleSizeChange(idx, "stock", e.target.value)}
+                  className="p-2 border border-gray-300 rounded"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeSize(idx)}
+                  className="px-2 py-1 bg-red-100 text-red-700 rounded"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addSize}
+              className="px-4 py-2 bg-green-100 text-green-700 rounded"
+            >
+              + Add Size
+            </button>
           </section>
 
           {/* Section: Description */}
@@ -392,19 +410,7 @@ const AddProduct = () => {
               </button>
             </div>
 
-            <div>
-              <label className="block font-medium text-gray-700 mb-2">
-                Sizes (comma-separated)
-                <input
-                  type="text"
-                  name="sizes"
-                  value={formData.sizes}
-                  onChange={handleChange}
-                  placeholder="e.g., S, M, L, XL"
-                  className="w-full mt-2 p-3 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 transition"
-                />
-              </label>
-            </div>
+          
           </section>
 
           {/* Section: Details */}
