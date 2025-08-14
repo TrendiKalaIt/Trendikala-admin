@@ -96,8 +96,9 @@ const autoLogger = async (req, res, next) => {
               details = `Updated product: ${
                 oldProduct.productName || "Unknown Product"
               } (ID: ${oldProduct._id}). Changes: ${changeSummary}`;
-            } else {
-              details = `Updated product with ID: ${req.params.id}`;
+            } 
+            else {
+              details = `Updated product with Code: ${req.body.productCode}, ${req.body.productName}`;
             }
           }
         }
