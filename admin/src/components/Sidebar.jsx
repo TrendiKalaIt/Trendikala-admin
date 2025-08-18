@@ -100,7 +100,7 @@ const Sidebar = ({ isOpen }) => {
                   isActive ? "text-white" : "text-[#49951C]"
                 }`}
               />
-              <span className={`${isOpen ? "inline" : "hidden"} md:inline`}>
+              <span className={`font-heading ${isOpen ? "inline" : "hidden"} md:inline`}>
                 {item.name}
               </span>
             </Link>

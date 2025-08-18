@@ -7,11 +7,12 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        dashboard: ["'Poppins'", "sans-serif"], // Or any custom font
+       dashboard: ['Bebas Neue', 'sans-serif'],
+        heading: ['Playfair Display', 'serif'],
+        body: ['Lato', 'sans-serif'],
       },
       colors: {
-        primaryText: "#1A1A1A",  // For headings
-        secondaryText: "#555",   // For subtext
+        luxuryGold: '#C5A880', // optional gold accent
       },
     },
   },

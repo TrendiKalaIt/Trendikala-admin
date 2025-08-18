@@ -193,7 +193,7 @@ const CustomersPageContent = () => {
       <div className="bg-white rounded-lg shadow-md w-full max-w-5xl p-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-          <h1 className="text-3xl font-semibold text-[#49951C]">
+          <h1 className="font-dashboard text-3xl font-semibold text-[#49951C]">
             Registered Users
           </h1>
 
@@ -221,21 +221,21 @@ const CustomersPageContent = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="font-dashboard px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="font-dashboard px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   User Type
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="font-dashboard px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Email
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="font-dashboard px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                   Mobile No
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="font-body bg-white divide-y divide-gray-200">
               {currentCustomers.length > 0 ? (
                 currentCustomers.map((customer) => (
                   <tr key={customer.id}>

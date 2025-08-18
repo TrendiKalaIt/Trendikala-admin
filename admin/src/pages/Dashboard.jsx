@@ -135,7 +135,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 space-y-6 bg-[#f5f9ef]">
-      <h1 className="text-2xl font-bold font-dashboard text-[#49951C]">
+      <h1 className="font-heading text-2xl font-bold font-dashboard text-[#49951C]">
         Dashboard
       </h1>
 
@@ -148,7 +148,7 @@ const Dashboard = () => {
           { title: "Total Products", value: dashboardData.totalProducts },
         ].map((item, index) => (
           <div key={index} className="bg-white shadow rounded-lg p-4">
-            <p className="text-gray-600">{item.title}</p>
+            <p className="font-body text-gray-600">{item.title}</p>
             <h3 className="text-xl font-semibold text-[#A2D286]">
               {item.value}
             </h3>
@@ -159,7 +159,7 @@ const Dashboard = () => {
       {/* Chart */}
       <div className="bg-white shadow rounded-lg p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold text-[#49951C]">
+          <h2 className="font-heading text-lg font-semibold text-[#49951C]">
             Orders Over Time
           </h2>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
@@ -173,7 +173,7 @@ const Dashboard = () => {
                     setShowCalendar(false);
                   }
                 }}
-                className="text-sm border border-gray-300 rounded px-2 py-1"
+                className=" font-body text-sm border border-gray-300 rounded px-2 py-1"
               >
                 <option>This Week</option>
                 <option>Last Month</option>
@@ -218,7 +218,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="h-64">
+        <div className="font-heading h-64">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={filteredChartData}>
               <defs>
@@ -272,29 +272,29 @@ const Dashboard = () => {
 
       {/* Recent Orders */}
       <div className="bg-white shadow rounded-lg p-6">
-        <h2 className="text-lg font-semibold text-[#3a4d39] mb-4">
+        <h2 className="font-heading text-lg font-semibold text-[#3a4d39] mb-4">
           Recent Orders
         </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-left">
             <thead className="bg-[#c5d5b6] text-[#3a4d39]">
               <tr>
-                <th className="px-4 py-2">Order ID</th>
-                <th className="px-4 py-2">Date</th>
-                <th className="px-4 py-2">Customer</th>
-                <th className="px-4 py-2">Total</th>
-                <th className="px-4 py-2">Payment</th>
-                <th className="px-4 py-2">Status</th>
+                <th className="font-heading px-4 py-2">Order ID</th>
+                <th className="font-heading px-4 py-2">Date</th>
+                <th className="font-heading px-4 py-2">Customer</th>
+                <th className="font-heading px-4 py-2">Total</th>
+                <th className="font-heading px-4 py-2">Payment</th>
+                <th className="font-heading px-4 py-2">Status</th>
               </tr>
             </thead>
             <tbody>
               {recentOrders.map((order, idx) => (
                 <tr key={idx} className="border-b">
-                  <td className="px-4 py-2">{order.orderId}</td>
-                  <td className="px-4 py-2">{order.orderDate}</td>
-                  <td className="px-4 py-2">{order.customerName}</td>
-                  <td className="px-4 py-2">{order.totalAmount}</td>
-                  <td className="px-4 py-2">
+                  <td className="font-body px-4 py-2">{order.orderId}</td>
+                  <td className="font-body px-4 py-2">{order.orderDate}</td>
+                  <td className="font-body px-4 py-2">{order.customerName}</td>
+                  <td className="font-body px-4 py-2">{order.totalAmount}</td>
+                  <td className="font-body px-4 py-2">
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${order.paymentStatus === "Paid"
                         ? "bg-green-100 text-green-600"

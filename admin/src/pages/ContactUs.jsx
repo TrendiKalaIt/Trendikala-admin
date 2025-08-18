@@ -46,11 +46,11 @@ const Contact = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-4 text-[#49951C]">Contact Enquiries</h1>
+      <h1 className="font-dashboard text-2xl font-semibold mb-4 text-[#49951C]">Contact Enquiries</h1>
 
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full border-collapse">
-          <thead className="bg-[#A2D286] text-gray-700">
+          <thead className="font-dashboard bg-[#A2D286] text-gray-700">
             <tr>
               <th className="py-3 px-4 text-left">Name</th>
               <th className="py-3 px-4 text-left">Email</th>
@@ -63,7 +63,7 @@ const Contact = () => {
             {messages.map((msg) => (
               <tr
                 key={msg._id}
-                className={`border-t hover:bg-gray-50 transition ${
+                className={`font-body border-t hover:bg-gray-50 transition ${
                    "bg-yellow-50" 
                 }`}
               >
@@ -101,7 +101,7 @@ const Contact = () => {
 
       {/* Message Details Modal */}
       {selectedMessage && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+        <div className="font-body fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-lg w-full max-w-lg relative">
             <div className="flex justify-between items-center border-b p-4">
               <h2 className="text-xl font-semibold">Message Details</h2>

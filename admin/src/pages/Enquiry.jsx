@@ -43,16 +43,7 @@ const Enquiry = () => {
     setSelectedEnquiry(enquiry);
 
     
-    // if (!enquiry.isRead) {
-    //   try {
-    //     await axios.patch(`${API_URL}/api/enquiries/${enquiry._id}/read`);
-    //     setEnquiries((prev) =>
-    //       prev.map((e) => (e._id === enquiry._id ? { ...e, isRead: true } : e))
-    //     );
-    //   } catch (err) {
-    //     console.error("Error marking as read:", err);
-    //   }
-    // }
+    
   };
 
   
@@ -66,7 +57,7 @@ const Enquiry = () => {
   if (loading) return <p className="p-4">Loading enquiries...</p>;
 
   return (
-    <div className="p-6">
+    <div className="font-dashboard p-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-[#49951C]">Enquiries</h1>
@@ -102,7 +93,7 @@ const Enquiry = () => {
               filteredEnquiries.map((enquiry) => (
                 <tr
                   key={enquiry._id}
-                  className={`border-b transition ${
+                  className={`font-body border-b transition ${
                      "hover:bg-gray-100"
                   }`}
                 >
@@ -156,7 +147,7 @@ const Enquiry = () => {
 
       {/* Modal */}
       {selectedEnquiry && (
-        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
+        <div className="font-body fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-lg max-w-lg w-full flex flex-col max-h-[90vh]">
             {/* Modal Header */}
             <div className="flex justify-between items-center border-b px-6 py-4">

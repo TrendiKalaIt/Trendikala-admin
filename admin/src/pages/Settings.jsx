@@ -167,7 +167,7 @@ const Settings = () => {
   return (
     <div className="p-2 bg-[#f0f5eb] min-h-screen">
       <ToastContainer />
-      <h1 className="text-3xl font-bold text-[#49951C] mb-6">Settings</h1>
+      <h1 className="font-dashboard text-2xl font-semibold text-[#49951C] mb-6">Settings</h1>
 
       <div className="bg-white rounded-lg shadow p-2 grid md:grid-cols-5 gap-2">
         
@@ -175,7 +175,7 @@ const Settings = () => {
           <div className="space-y-4">
             <button
               onClick={() => setActiveTab("general")}
-              className={`w-full text-left text-lg font-semibold ${
+              className={`font-heading w-full text-left text-lg font-semibold ${
                 activeTab === "general"
                   ? "text-[#3a4d39] border-b pb-2 border-[#3a4d39]"
                   : "text-gray-600 hover:text-[#3a4d39]"
@@ -186,7 +186,7 @@ const Settings = () => {
             {formData.role === "superadmin" && (
               <button
                 onClick={() => setActiveTab("roles")}
-                className={`w-full text-left text-lg ${
+                className={`font-heading w-full text-left text-lg ${
                   activeTab === "roles"
                     ? "text-[#3a4d39] border-b pb-2 border-[#3a4d39]"
                     : "text-gray-600 hover:text-[#3a4d39]"
@@ -204,7 +204,7 @@ const Settings = () => {
             <>
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <h2>User Profile</h2>
+                  <h2 className="font-dashboard">User Profile</h2>
                 </div>
               </div>
 
@@ -219,7 +219,7 @@ const Settings = () => {
                     className="flex items-center justify-between border-b pb-3"
                   >
                     <div className="w-full">
-                      <p className="text-gray-500 text-sm">{label}</p>
+                      <p className="font-dashboard text-gray-500 text-sm">{label}</p>
                       {editingField === name ? (
                         <input
                           name={name}
@@ -228,7 +228,7 @@ const Settings = () => {
                           className="border rounded px-3 py-1 mt-1 w-full"
                         />
                       ) : (
-                        <p className="font-medium text-lg">{formData[name]}</p>
+                        <p className="font-body font-medium text-lg">{formData[name]}</p>
                       )}
                     </div>
                     <div className="ml-4">
@@ -250,8 +250,8 @@ const Settings = () => {
                   </div>
                 ))}
                 <div className="border-b pb-3">
-                  <p className="text-gray-500 text-sm">User Role</p>
-                  <p className="font-medium text-lg">{formData.role}</p>
+                  <p className="font-dashboard text-gray-500 text-sm">User Role</p>
+                  <p className="font-body font-medium text-lg">{formData.role}</p>
                 </div>
               </div>
             </>
@@ -259,10 +259,10 @@ const Settings = () => {
 
           {activeTab === "roles" && formData.role === "superadmin" && (
             <div>
-              <h2 className="text-xl font-semibold mb-4">All Users</h2>
+              <h2 className="font-dashboard text-xl font-medium mb-4">All Users</h2>
               <div className="overflow-x-auto">
                 <table className="w-full bg-white border">
-                  <thead>
+                  <thead className="font-body font-normal">
                     <tr className="bg-[#f0f0f0] text-left">
                       <th className="p-2 border">Name</th>
                       <th className="p-2 border">Email</th>
@@ -272,7 +272,7 @@ const Settings = () => {
                   </thead>
                   <tbody>
                     {allUsers.map((user) => (
-                      <tr key={user._id} className="hover:bg-gray-50">
+                      <tr key={user._id} className="font-body hover:bg-gray-50">
                         <td className="p-2 border">{user.name}</td>
                         <td className="p-2 border">{user.email}</td>
                         <td className="p-2 border">{user.role}</td>

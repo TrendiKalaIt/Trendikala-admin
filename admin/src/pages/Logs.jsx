@@ -270,7 +270,7 @@ const Logs = () => {
   return (
     <div className="p-6 bg-white rounded-xl shadow-lg max-w-full">
       <header className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
-        <h1 className="text-2xl font-bold text-[#49951C]">Activity Logs</h1>
+        <h1 className="font-dashboard text-2xl font-bold text-[#49951C]">Activity Logs</h1>
         <SearchBar />
       </header>
 
@@ -281,7 +281,7 @@ const Logs = () => {
           <div className="p-6 text-center text-red-500">Error: {error}</div>
         ) : (
           <table className="min-w-full text-sm text-gray-700">
-            <thead className="bg-[#A2D286] text-green-700 uppercase text-xs tracking-wider border-b border-gray-200">
+            <thead className="font-dashboard bg-[#A2D286] text-green-700 uppercase text-xs tracking-wider border-b border-gray-200">
               <tr>
                 <th className="px-4 py-3 text-center">Delete</th>
                 <th className="px-4 py-3 text-left">Date</th>
@@ -291,7 +291,7 @@ const Logs = () => {
                 <th className="px-4 py-3 text-left">Details</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="font-body divide-y divide-gray-100">
               {currentLogs.length > 0 ? (
                 currentLogs.map((log, index) => (
                   <LogRow key={log._id} log={log} index={index} />

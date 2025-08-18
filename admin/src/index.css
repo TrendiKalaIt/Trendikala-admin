@@ -1,3 +1,10 @@
+/* In your main.css or index.css */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+

@@ -171,9 +171,9 @@ const Orders = () => {
   if (loading) return <div className="p-6 text-center">Loading Orders...</div>;
 
   return (
-    <div className="p-6 bg-[#f5f9ef] min-h-screen">
+    <div className="font-dashboard p-6 bg-[#f5f9ef] min-h-screen">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold text-[#49951C]">Orders</h1>
+        <h1 className="text-3xl font-bold text-[#49951C]">Orders</h1>
         <button
           onClick={handleExport}
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -215,7 +215,7 @@ const Orders = () => {
                 <tr key={order.id} className="border-b hover:bg-gray-50">
                   
                   <td
-                    className="px-3 py-2 text-blue-600 font-medium cursor-pointer underline"
+                    className="font-body px-3 py-2 text-blue-600 font-medium cursor-pointer underline"
                     onClick={() =>
                       handleOrderClick(order.id.replace("", ""))
                     }
@@ -223,15 +223,15 @@ const Orders = () => {
                     {order.id}
                     
                   </td>
-                  <td className="px-3 py-2">{order.date}</td>
-                  <td className="px-3 py-2">
+                  <td className="font-body px-3 py-2">{order.date}</td>
+                  <td className="font-body px-3 py-2">
                     
                       {order.customer}
                   </td>
-                  <td className="px-3 py-2">{order.paymentStatus}</td>
+                  <td className="font-body px-3 py-2">{order.paymentStatus}</td>
                   
                      
-                  <td className="py-2">
+                  <td className="font-body py-2">
                     {["Delivered", "Cancelled"].includes(order.orderStatus) ? (
                       <div className="flex items-center gap-1 text-gray-500">
                         <span>{order.orderStatus}</span>
@@ -257,7 +257,7 @@ const Orders = () => {
                   </td>
 
 
-                  <td className="px-3 py-2">{order.total}</td>
+                  <td className="font-body px-3 py-2">{order.total}</td>
                 </tr>
               ))}
             </tbody>
@@ -265,7 +265,7 @@ const Orders = () => {
         </div>
 
         <div className="mt-4 flex justify-between items-center">
-          <p className="text-sm text-gray-600">{filteredOrders.length} Results</p>
+          <p className="font-body text-sm text-gray-600">{filteredOrders.length} Results</p>
           <div className="space-x-1">
             <button
               onClick={() => handlePageChange(currentPage - 1)}

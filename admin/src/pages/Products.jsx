@@ -130,7 +130,7 @@ const ProductsPageContent = () => {
   };
 
   return (
-    <div className="flex justify-center p-5 min-h-screen bg-[#f5f9ef]">
+    <div className=" font-dashboard flex justify-center p-5 min-h-screen bg-[#f5f9ef]">
       <div className="bg-white rounded-lg shadow-md w-full max-w-5xl p-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
