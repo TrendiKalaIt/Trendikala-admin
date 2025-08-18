@@ -135,7 +135,7 @@ const Dashboard = () => {
 
   return (
     <div className="p-4 space-y-6 bg-[#f5f9ef]">
-      <h1 className="font-heading text-2xl font-bold font-dashboard text-[#49951C]">
+      <h1 className="font-heading text-2xl font-bold  text-[#49951C]">
         Dashboard
       </h1>
 
