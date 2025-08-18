@@ -22,7 +22,11 @@ const getOrderByOrderId = async (req, res) => {
   try {
     const order = await Order.findOne({ orderId: req.params.orderId })
       .populate('user', 'name email')
-      .populate('items.product', 'name images');
+      .populate({
+        path: 'items.product',
+        select: 'name images',
+        strictPopulate: false,
+      });
 
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
@@ -30,10 +34,12 @@ const getOrderByOrderId = async (req, res) => {
 
     res.status(200).json(order);
   } catch (error) {
-    console.error('Error fetching order by orderId:', error.message);
+    console.error('Error fetching order by orderId:', error); // ← full error for debugging
     res.status(500).json({ message: 'Server error while fetching order details' });
   }
 };
+
+
 
 
 

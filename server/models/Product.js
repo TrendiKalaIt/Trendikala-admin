@@ -46,8 +46,10 @@ const productSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Virtual field: product in stock if any size has stock
-productSchema.virtual('inStock').get(function () {
-  return this.sizes.some(s => s.stock > 0);
+productSchema.virtual('isDiscounted').get(function () {
+  return Array.isArray(this.variants) && this.variants.some(
+    v => v.discountPrice < v.originalPrice
+  );
 });
 
 // Ensure virtual fields are serialized
