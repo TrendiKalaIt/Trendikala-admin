@@ -18,7 +18,7 @@ const Topbar = () => {
     <header className="bg-[#93A87E] px-6 py-3 flex justify-between items-center w-full relative">
       <div className="flex items-center gap-2">
         <img src={logo} alt="Logo" className="h-10" />
-        <span className="font-heading text-2xl font-bold font-dashboard text-[#f0f2f0]">Trendi Kala</span>
+        <span className="font-heading text-2xl font-bold  text-[#f0f2f0]">Trendi Kala</span>
       </div>
 
       <div className="relative">
