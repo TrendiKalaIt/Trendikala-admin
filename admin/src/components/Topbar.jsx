@@ -1,6 +1,6 @@
 import { useUser } from "../context/UserContext";
 import { ChevronDown } from "lucide-react";
-import logo from '../assets/images/trendikala_logo_bg.JPEG';
+import logo from "../assets/images/trendikala_logo_bg.jpeg";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
