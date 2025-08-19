@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Eye, EyeOff } from "lucide-react";
-import logo from '../assets/images/trendikala_logo_bg.JPEG';
+import logo from "../assets/images/trendikala_logo_bg.jpeg";
  
 
 const LoginPage = () => {
