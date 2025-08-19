@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Eye, EyeOff } from "lucide-react";
-import logo from '../assets/images/trendikala_logo_bg.JPEG'; 
+import logo from '../assets/images/trendikala_logo_bg.JPEG';
+ 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -54,7 +55,7 @@ const LoginPage = () => {
 
         {/* RIGHT SIDE - Login Form */}
         <form onSubmit={handleLogin} className="p-8 w-2/3">
-          <h2 className="text-3xl font-bold mb-6 text-center text-[#49951C]">
+          <h2 className="font-heading text-3xl font-bold mb-6 text-center text-[#49951C]">
             Admin Login
           </h2>
           <input
@@ -84,7 +85,7 @@ const LoginPage = () => {
 
           <button
             type="submit"
-            className="w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"
+            className="font-heading w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"
           >
             Login
           </button>

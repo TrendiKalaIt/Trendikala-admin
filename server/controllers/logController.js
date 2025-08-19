@@ -11,6 +11,7 @@ exports.getLogs = async (req, res) => {
 };
 
 
+
 exports.createLog = async (req, res) => {
   try {
     const newLog = await Log.create(req.body);

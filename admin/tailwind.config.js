@@ -12,7 +12,7 @@ export default {
         body: ['Lato', 'sans-serif'],
       },
       colors: {
-        luxuryGold: '#C5A880', // optional gold accent
+        luxuryGold: '#C5A880', 
       },
     },
   },

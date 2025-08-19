@@ -12,7 +12,7 @@ const ProductsPageContent = () => {
   const [itemsPerPage] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [selectedSizes, setSelectedSizes] = useState({}); // productId -> selectedSize
+  const [selectedSizes, setSelectedSizes] = useState({}); 
 
   const navigate = useNavigate();
 
