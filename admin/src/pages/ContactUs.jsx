@@ -9,7 +9,6 @@ const Contact = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -27,7 +26,6 @@ const Contact = () => {
   const handleView = async (msg) => {
     setSelectedMessage(msg);
 
-    
     try {
       await axios.put(`${API_URL}/api/contact-messages/${msg._id}`, {
         visited: true,
@@ -39,6 +37,20 @@ const Contact = () => {
       console.error("Error updating visit status:", error);
     }
   };
+  const handleToggleRead = async (msg) => {
+  try {
+    const res = await axios.put(`${API_URL}/api/contact-messages/${msg._id}/status`, {
+      visited: !msg.visited,  
+    });
+
+    setMessages((prev) =>
+      prev.map((m) => (m._id === msg._id ? res.data : m))
+    );
+  } catch (error) {
+    console.error("Error toggling read status:", error);
+  }
+};
+
 
   if (loading) {
     return <div className="text-center py-10 text-gray-500">Loading...</div>;
@@ -46,7 +58,9 @@ const Contact = () => {
 
   return (
     <div className="p-6">
-      <h1 className="font-dashboard text-2xl font-semibold mb-4 text-[#49951C]">Contact Enquiries</h1>
+      <h1 className="font-dashboard text-2xl font-semibold mb-4 text-[#49951C]">
+        Contact Enquiries
+      </h1>
 
       <div className="overflow-x-auto bg-white shadow-md rounded-lg">
         <table className="min-w-full border-collapse">
@@ -64,7 +78,7 @@ const Contact = () => {
               <tr
                 key={msg._id}
                 className={`font-body border-t hover:bg-gray-50 transition ${
-                   "bg-yellow-50" 
+                  msg.visited ? "bg-white" : "bg-yellow-50" 
                 }`}
               >
                 <td className="py-3 px-4">{msg.name}</td>
@@ -75,14 +89,26 @@ const Contact = () => {
                 <td className="py-3 px-4">
                   {new Date(msg.createdAt).toLocaleDateString()}
                 </td>
-                <td className="py-3 px-4 text-center">
-                  <button
-                    onClick={() => handleView(msg)}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md flex items-center gap-1 mx-auto"
-                  >
-                    <Eye size={16} /> View
-                  </button>
-                </td>
+                <td className="py-3 px-4 text-center flex gap-2 justify-center">
+  <button
+    onClick={() => handleView(msg)}
+    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
+  >
+    <Eye size={16} /> View
+  </button>
+
+  <button
+    onClick={() => handleToggleRead(msg)}
+    className={`px-3 py-1 rounded-md ${
+      msg.visited
+        ? "bg-green-100 text-green-700 hover:bg-green-200"
+        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+    }`}
+  >
+    {msg.visited ? "✓ Read" : "Mark Read"}
+  </button>
+</td>
+
               </tr>
             ))}
             {messages.length === 0 && (

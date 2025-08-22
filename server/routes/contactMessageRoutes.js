@@ -5,4 +5,7 @@ const contactMessageController = require("../controllers/contactMessageControlle
 
 router.get("/", contactMessageController.getAllMessages);
 
+
+router.put("/:id/status", contactMessageController.toggleReadStatus);
+
 module.exports = router;

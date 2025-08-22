@@ -306,11 +306,11 @@ const Orders = () => {
               ✕
             </button>
 
-            <h2 className="text-xl font-bold mb-4 text-green-700">
+            <h2 className="font-body text-xl font-bold mb-4 text-green-700">
               OrderID: {selectedOrderDetails.orderId}
             </h2>
 
-            <div className="mb-2">
+            <div className="font-body mb-2">
               <p>
                 <strong>Customer:</strong>{" "}
                 {selectedOrderDetails.shippingInfo?.fullName || "Guest"}
@@ -330,7 +330,7 @@ const Orders = () => {
               </p>
             </div>
 
-            <h3 className="font-semibold mt-4 mb-2">Items:</h3>
+            <h3 className="font-body font-semibold mt-4 mb-2">Items:</h3>
             <ul className="divide-y">
               {selectedOrderDetails.items.map((item, idx) => (
                 <li
@@ -356,7 +356,7 @@ const Orders = () => {
               ))}
             </ul>
 
-            <div className="mt-4 text-right font-semibold">
+            <div className="font-body mt-4 text-right font-semibold">
               Shipping: ₹{selectedOrderDetails.shippingCost.toFixed(2)} <br />
               Total: ₹{selectedOrderDetails.totalAmount.toFixed(2)}
             </div>
