@@ -38,19 +38,21 @@ const Contact = () => {
     }
   };
   const handleToggleRead = async (msg) => {
-  try {
-    const res = await axios.put(`${API_URL}/api/contact-messages/${msg._id}/status`, {
-      visited: !msg.visited,  
-    });
+    try {
+      const res = await axios.put(
+        `${API_URL}/api/contact-messages/${msg._id}/status`,
+        {
+          visited: !msg.visited,
+        }
+      );
 
-    setMessages((prev) =>
-      prev.map((m) => (m._id === msg._id ? res.data : m))
-    );
-  } catch (error) {
-    console.error("Error toggling read status:", error);
-  }
-};
-
+      setMessages((prev) =>
+        prev.map((m) => (m._id === msg._id ? res.data : m))
+      );
+    } catch (error) {
+      console.error("Error toggling read status:", error);
+    }
+  };
 
   if (loading) {
     return <div className="text-center py-10 text-gray-500">Loading...</div>;
@@ -66,11 +68,21 @@ const Contact = () => {
         <table className="min-w-full border-collapse">
           <thead className="font-dashboard bg-[#A2D286] text-gray-700">
             <tr>
-              <th className="py-3 px-4 text-left">Name</th>
-              <th className="py-3 px-4 text-left">Email</th>
-              <th className="py-3 px-4 text-left">Message</th>
-              <th className="py-3 px-4 text-left">Date</th>
-              <th className="py-3 px-4 text-center">Action</th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Name
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Email
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Message
+              </th>
+              <th className="px-6 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Date
+              </th>
+              <th className="px-6 py-3 text-center text-sm font-medium text-gray-500 uppercase tracking-wider">
+                Action
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -78,7 +90,7 @@ const Contact = () => {
               <tr
                 key={msg._id}
                 className={`font-body border-t hover:bg-gray-50 transition ${
-                  msg.visited ? "bg-white" : "bg-yellow-50" 
+                  msg.visited ? "bg-white" : "bg-yellow-50"
                 }`}
               >
                 <td className="py-3 px-4">{msg.name}</td>
@@ -89,26 +101,25 @@ const Contact = () => {
                 <td className="py-3 px-4">
                   {new Date(msg.createdAt).toLocaleDateString()}
                 </td>
-                <td className="py-3 px-4 text-center flex gap-2 justify-center">
-  <button
-    onClick={() => handleView(msg)}
-    className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md flex items-center gap-1"
-  >
-    <Eye size={16} /> View
-  </button>
+                <td className="py-1 px-4 text-center flex gap-2 justify-center">
+                  <button
+                    onClick={() => handleView(msg)}
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-3  rounded-md flex items-center gap-1"
+                  >
+                    <Eye size={16} /> View
+                  </button>
 
-  <button
-    onClick={() => handleToggleRead(msg)}
-    className={`px-3 py-1 rounded-md ${
-      msg.visited
-        ? "bg-green-100 text-green-700 hover:bg-green-200"
-        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-    }`}
-  >
-    {msg.visited ? "✓ Read" : "Mark Read"}
-  </button>
-</td>
-
+                  <button
+                    onClick={() => handleToggleRead(msg)}
+                    className={`px-3 py-1 rounded-md ${
+                      msg.visited
+                        ? "bg-green-100 text-green-700 hover:bg-green-200"
+                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                    }`}
+                  >
+                    {msg.visited ? "✓ Read" : "Mark Read"}
+                  </button>
+                </td>
               </tr>
             ))}
             {messages.length === 0 && (

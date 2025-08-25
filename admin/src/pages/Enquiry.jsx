@@ -102,16 +102,16 @@ const Enquiry = () => {
         <table className="w-full border-collapse text-sm">
           <thead className="bg-[#A2D286] text-gray-700">
             <tr>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Email</th>
-              <th className="p-3 text-left">Phone</th>
-              <th className="p-3 text-left">Type</th>
-              <th className="p-3 text-left">Preferred Contact</th>
-              <th className="p-3 text-left">Message</th>
-              <th className="p-3 text-left">Date</th>
-              <th className="p-3 text-left">Action Taken</th>
-              <th className="p-3 text-left">Action Date</th>
-              <th className="p-3 text-center">Actions</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Preferred Contact</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Message</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action Taken</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action Date</th>
+              <th className="px-3 py-3 text-centre text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>

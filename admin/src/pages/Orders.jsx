@@ -202,12 +202,12 @@ const Orders = () => {
             <thead className="bg-[#e2ebdd] text-[#3a4d39]">
               <tr>
                 
-                <th className="px-3 py-2">Order</th>
-                <th className="px-3 py-2">Date</th>
-                <th className="px-3 py-2">Customer</th>
-                <th className="px-3 py-2">Payment Status</th>
-                <th className="px-3 py-2">Order Status</th>
-                <th className="px-3 py-2">Total</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
               </tr>
             </thead>
             <tbody>
