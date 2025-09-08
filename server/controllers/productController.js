@@ -2,6 +2,7 @@ const Product = require("../models/Product");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 const Log = require("../models/Log");
+const slugify = require("slugify"); 
 
 const uploadFromBuffer = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -128,6 +129,9 @@ exports.addProduct = async (req, res) => {
       sizeShape: parsedSizeShape,
       thumbnail: thumbnailUrl,
       media,
+
+      slug: slugify(productName, { lower: true, strict: true }),
+
     };
 
     const product = await Product.create(productData);
@@ -157,6 +161,12 @@ exports.editProduct = async (req, res) => {
       materialWashing: tryParseJSON(req.body.materialWashing),
       sizeShape: tryParseJSON(req.body.sizeShape),
     };
+
+
+    // If productName updated, regenerate slug
+    if (req.body.productName) {
+      updatedFields.slug = slugify(req.body.productName, { lower: true, strict: true });
+    }
 
     const mediaFiles = req.files?.media || [];
     const thumbnailFile = req.files?.thumbnail?.[0];
