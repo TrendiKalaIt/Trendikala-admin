@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -242,7 +243,12 @@ const Coupon = () => {
           <tbody>
             {coupons.map((coupon) => (
               <tr key={coupon._id} className="border-b hover:bg-gray-50">
-                <td className="p-2">{coupon.coupon_code}</td>
+              <Link
+                    to={`/coupons/${coupon._id}`}
+                    className="underline font-semibold  text-blue-500"
+                  >
+                     <td className="p-2">{coupon.coupon_code}</td>
+                  </Link> 
                 <td className="p-2">{coupon.discount_type}</td>
                 <td className="p-2">{coupon.discount_value}</td>
                 <td className="p-2">{coupon.expiry_date.split("T")[0]}</td>
@@ -261,7 +267,10 @@ const Coupon = () => {
                   >
                     Delete
                   </button>
+                  
                 </td>
+
+
               </tr>
             ))}
           </tbody>

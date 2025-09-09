@@ -8,12 +8,15 @@ const {
   getCoupons,
   deleteCoupon,
   updateCoupon,
+  getCouponById
 } = require("../controllers/couponController");
  
 // Admin APIs
-router.post("/", protect, authorizeRoles("admin", "superadmin"), createCoupon); // add new coupon
-router.get("/", protect, authorizeRoles('admin', 'superadmin'), getCoupons); // list all coupons
-router.put("/:id", protect, authorizeRoles('admin', 'superadmin'), updateCoupon); // update coupon
-router.delete("/:id", protect, authorizeRoles('admin', 'superadmin'), deleteCoupon); // delete coupon
+router.post("/", protect, authorizeRoles("admin", "superadmin"), createCoupon); 
+router.get("/", protect, authorizeRoles('admin', 'superadmin'), getCoupons);
+router.put("/:id", protect, authorizeRoles('admin', 'superadmin'), updateCoupon);
+router.delete("/:id", protect, authorizeRoles('admin', 'superadmin'), deleteCoupon);
+router.get("/:id", protect, authorizeRoles("admin", "superadmin"), getCouponById);
+
  
 module.exports = router;

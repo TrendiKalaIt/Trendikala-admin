@@ -18,6 +18,7 @@ import Logs from "./pages/Logs";
 import Enquiry from "./pages/Enquiry";
 import ContactUs from "./pages/ContactUs";
 import Coupon from "./pages/Coupon";
+import CouponDetail from "./pages/CouponDetail";
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
                 <Route path="enquiry" element={<Enquiry />} />
                 <Route path="contactus" element={<ContactUs />} />
                 <Route path="coupon" element={<Coupon />} />
+                <Route path="/coupons/:id" element={<CouponDetail />} />
 
 
                 <Route path="settings" element={<Settings />} />

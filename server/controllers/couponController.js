@@ -82,3 +82,29 @@ module.exports = {
   deleteCoupon,
   updateCoupon
 };
+
+
+// Get Single Coupon by ID
+const getCouponById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coupon = await Coupon.findById(id)
+      .populate("coupon_used_by_users.user_id", "name email") // user ka naam, email dikhane ke liye
+      .populate("coupon_used_by_users.order_id", "_id totalAmount"); // order ka detail
+
+    if (!coupon) {
+      return res.status(404).json({ success: false, message: "Coupon not found" });
+    }
+
+    res.json({ success: true, coupon });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+module.exports = {
+  createCoupon,
+  getCoupons,
+  deleteCoupon,
+  updateCoupon,
+  getCouponById, }
