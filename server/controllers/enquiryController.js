@@ -37,8 +37,38 @@ const deleteEnquiry = async (req, res) => {
   }
 };
 
+
+const markEnquiryStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isRead, actionNote } = req.body;
+
+    const enquiry = await Enquiry.findById(id);
+    if (!enquiry) return res.status(404).json({ message: "Enquiry not found" });
+
+    
+    if (enquiry.actionNote && actionNote && enquiry.actionNote !== actionNote) {
+      return res.status(400).json({ message: "Action note already set and cannot be updated again" });
+    }
+
+    if (isRead !== undefined) enquiry.isRead = isRead;
+    if (actionNote && !enquiry.actionNote) {
+      enquiry.actionNote = actionNote;
+      enquiry.actionDate = new Date();  
+    }
+
+    await enquiry.save();
+    res.status(200).json(enquiry);
+  } catch (err) {
+    res.status(500).json({ message: "Error updating enquiry", error: err.message });
+  }
+};
+
+
+
 module.exports = {
   getEnquiries,
   getEnquiryById,
-  deleteEnquiry
+  deleteEnquiry,
+  markEnquiryStatus
 };

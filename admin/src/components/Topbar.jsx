@@ -30,10 +30,10 @@ const Topbar = () => {
             {user?.name?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="text-right">
-            <div className="text-[#f0f2f0] font-medium">
+            <div className="font-heading text-[#f0f2f0] font-medium">
               {user?.name || "Unknown"}
             </div>
-            <div className="text-sm text-[#f0f2f0] italic capitalize">
+            <div className="font-body text-sm text-[#f0f2f0]  capitalize">
               {user?.role || "Role"}
             </div>
           </div>

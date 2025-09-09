@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
- 
+
 const enquirySchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true },
@@ -8,8 +8,11 @@ const enquirySchema = new mongoose.Schema({
   message: { type: String, required: true },
   preferredContactMethod: { type: String, enum: ['Email', 'Phone'], default: 'Email' },
   preferredTime: String,
+  isRead: { type: Boolean, default: false },   
+  actionNote: { type: String, default: "" },
+  actionDate: { type: Date } 
 }, {
   timestamps: true
 });
- 
+
 module.exports = mongoose.model('Enquiry', enquirySchema);

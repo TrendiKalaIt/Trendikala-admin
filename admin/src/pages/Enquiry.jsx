@@ -10,7 +10,6 @@ const Enquiry = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
 
- 
   const fetchEnquiries = async () => {
     try {
       const { data } = await axios.get(`${API_URL}/api/enquiries`);
@@ -26,7 +25,6 @@ const Enquiry = () => {
     fetchEnquiries();
   }, []);
 
-
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this enquiry?")) {
       try {
@@ -38,15 +36,42 @@ const Enquiry = () => {
     }
   };
 
-  
-  const handleView = async (enquiry) => {
+  const handleView = (enquiry) => {
     setSelectedEnquiry(enquiry);
-
-    
-    
   };
 
-  
+  const handleToggleStatus = async (id, newStatus) => {
+    try {
+      const { data } = await axios.patch(
+        `${API_URL}/api/enquiries/${id}/status`,
+        { isRead: newStatus }
+      );
+      setEnquiries((prev) => prev.map((enq) => (enq._id === id ? data : enq)));
+    } catch (err) {
+      console.error("Error updating enquiry status:", err);
+    }
+  };
+
+  const handleSaveAction = async (enquiry) => {
+    try {
+      const { data } = await axios.patch(
+        `${API_URL}/api/enquiries/${enquiry._id}/status`,
+        {
+          isRead: true,
+          actionNote: enquiry.actionNote || "",
+          actionDate: new Date(),
+          finalized: true, 
+        }
+      );
+      setEnquiries((prev) =>
+        prev.map((enq) => (enq._id === enquiry._id ? data : enq))
+      );
+      setSelectedEnquiry(null);
+    } catch (err) {
+      console.error("Error saving action:", err);
+    }
+  };
+
   const filteredEnquiries = enquiries.filter(
     (enq) =>
       enq.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -73,19 +98,20 @@ const Enquiry = () => {
         </div>
       </div>
 
-     
       <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
         <table className="w-full border-collapse text-sm">
           <thead className="bg-[#A2D286] text-gray-700">
             <tr>
-              <th className="p-3 text-left">Name</th>
-              <th className="p-3 text-left">Email</th>
-              <th className="p-3 text-left">Phone</th>
-              <th className="p-3 text-left">Type</th>
-              <th className="p-3 text-left">Preferred Contact</th>
-              <th className="p-3 text-left">Message</th>
-              <th className="p-3 text-left">Date</th>
-              <th className="p-3 text-center">Actions</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Name</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Email</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Type</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Preferred Contact</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Message</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Date</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action Taken</th>
+              <th className="px-3 py-3 text-left text-sm font-medium text-gray-500 uppercase tracking-wider">Action Date</th>
+              <th className="px-3 py-3 text-centre text-sm font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -94,8 +120,8 @@ const Enquiry = () => {
                 <tr
                   key={enquiry._id}
                   className={`font-body border-b transition ${
-                     "hover:bg-gray-100"
-                  }`}
+                    enquiry.isRead ? "bg-white" : "bg-yellow-50"
+                  } hover:bg-gray-100`}
                 >
                   <td className="p-3">{enquiry.fullName}</td>
                   <td className="p-3">{enquiry.email}</td>
@@ -114,9 +140,24 @@ const Enquiry = () => {
                     {enquiry.message.split(" ").slice(0, 4).join(" ") +
                       (enquiry.message.split(" ").length > 4 ? "..." : "")}
                   </td>
-
                   <td className="p-3">
                     {new Date(enquiry.createdAt).toLocaleString()}
+                  </td>
+                  <td className="p-3">
+                    {enquiry.actionNote ? (
+                      <span className="text-gray-700">
+                        {enquiry.actionNote}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400 italic">
+                        No action yet
+                      </span>
+                    )}
+                  </td>
+                  <td className="p-3">
+                    {enquiry.actionDate
+                      ? new Date(enquiry.actionDate).toLocaleString()
+                      : "—"}
                   </td>
                   <td className="p-3 flex justify-center gap-2">
                     <button
@@ -131,12 +172,24 @@ const Enquiry = () => {
                     >
                       <Trash2 size={16} />
                     </button>
+                    <button
+                      onClick={() =>
+                        handleToggleStatus(enquiry._id, !enquiry.isRead)
+                      }
+                      className={`p-2 rounded ${
+                        enquiry.isRead
+                          ? "bg-green-100 text-green-600"
+                          : "bg-gray-100 text-gray-600"
+                      } hover:opacity-80`}
+                    >
+                      {enquiry.isRead ? "✓ Read" : "Mark Read"}
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="8" className="p-4 text-center text-gray-500">
+                <td colSpan="10" className="p-4 text-center text-gray-500">
                   No enquiries found.
                 </td>
               </tr>
@@ -186,6 +239,29 @@ const Enquiry = () => {
                 </div>
               </div>
 
+              <div className="mt-3">
+                <strong>Action Taken:</strong>
+                <textarea
+                  className="w-full border rounded p-2 mt-1"
+                  rows="3"
+                  placeholder="Enter action taken (e.g., Called customer, Sent email)..."
+                  value={selectedEnquiry.actionNote || ""}
+                  onChange={(e) =>
+                    setSelectedEnquiry({
+                      ...selectedEnquiry,
+                      actionNote: e.target.value,
+                    })
+                  }
+                  readOnly={!!selectedEnquiry.finalized} 
+                />
+                {selectedEnquiry.actionDate && (
+                  <p className="text-sm text-gray-500 mt-2">
+                    Updated on:{" "}
+                    {new Date(selectedEnquiry.actionDate).toLocaleString()}
+                  </p>
+                )}
+              </div>
+
               <p className="mt-3 text-sm text-gray-500">
                 Submitted on{" "}
                 {new Date(selectedEnquiry.createdAt).toLocaleString()}
@@ -193,12 +269,23 @@ const Enquiry = () => {
             </div>
 
             {/* Modal Footer */}
-            <div className="border-t px-6 py-4 flex justify-end">
+            <div className="border-t px-6 py-4 flex justify-between">
               <button
                 onClick={() => setSelectedEnquiry(null)}
                 className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
               >
                 Close
+              </button>
+              <button
+                onClick={() => handleSaveAction(selectedEnquiry)}
+                className={`px-4 py-2 rounded text-white ${
+                  selectedEnquiry.finalized
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-green-500 hover:bg-green-600"
+                }`}
+                disabled={!!selectedEnquiry.finalized}
+              >
+                Save Action
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const mediaSchema = new mongoose.Schema({
   type: { type: String, enum: ['image', 'video'], required: true },
@@ -8,6 +9,7 @@ const mediaSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
   productCode: { type: String, required: true, unique: true, uppercase: true, trim: true },
   productName: { type: String, required: true },
+  slug: { type: String, unique: true, index: true },
   category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
   brand: String,
   media: [mediaSchema],
@@ -44,6 +46,15 @@ const productSchema = new mongoose.Schema({
   sizeShape: [{ label: String, value: String }],
 
 }, { timestamps: true });
+
+
+// 🔹 Slug auto-generate/update before save
+productSchema.pre('save', function (next) {
+  if (this.isModified('productName')) {
+    this.slug = slugify(this.productName, { lower: true, strict: true });
+  }
+  next();
+});
 
 
 productSchema.virtual('isDiscounted').get(function () {
