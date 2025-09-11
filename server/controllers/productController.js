@@ -3,7 +3,6 @@ const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 const Log = require("../models/Log");
 const slugify = require("slugify");
-import { Helmet } from 'react-helmet-async';
 
 
 const uploadFromBuffer = (buffer) => {
