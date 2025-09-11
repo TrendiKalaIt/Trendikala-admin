@@ -1,30 +1,3 @@
-// const mongoose = require("mongoose");
- 
-// const couponSchema = new mongoose.Schema({
-//   code: { type: String, required: true, unique: true },
-//   discountType: { type: String, enum: ["fixed", "percentage"], default: "fixed" },
-//   discountValue: { type: Number, required: true }, // e.g. 500 or 10%
-//   expiryDate: { type: Date, required: true },
-//   totalUsageLimit: { type: Number, default: 0 }, // 0 = unlimited
-//   usedCount: { type: Number, default: 0 },
-//   perUserLimit: { type: Number, default: 1 },
-//   usedBy: [
-//     {
-//       userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-//       count: { type: Number, default: 0 }
-//     }
-//   ]
-// }, { timestamps: true });
- 
-// const Coupon = mongoose.model("Coupon", couponSchema);
-// module.exports = Coupon;
-
-
-
-
-
-
-
 // models/Coupon.js
 const mongoose = require('mongoose');
 const { Schema } = mongoose;

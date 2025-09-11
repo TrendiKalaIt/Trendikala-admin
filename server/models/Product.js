@@ -24,10 +24,10 @@ const productSchema = new mongoose.Schema({
 
   // Size-wise pricing & stock
   sizes: [{
-    size: { type: String, required: true },          
-    price: { type: Number, required: true },         
-    discountPrice: { type: Number },                  
-    stock: { type: Number, required: true, default: 0 } 
+    size: { type: String, required: true },
+    price: { type: Number, required: true },
+    discountPrice: { type: Number },
+    stock: { type: Number, required: true, default: 0 }
   }],
 
   details: {
@@ -44,6 +44,11 @@ const productSchema = new mongoose.Schema({
 
   materialWashing: [{ label: String, value: String }],
   sizeShape: [{ label: String, value: String }],
+
+  metaTitle: { type: String, default: function () { return `${this.productName || 'Trendikala'} | Trendikala`; } },
+  metaDescription: { type: String, default: "Trendikala" },
+  metaKeywords: { type: String, default: "Trendikala" },
+
 
 }, { timestamps: true });
 

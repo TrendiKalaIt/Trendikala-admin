@@ -106,7 +106,8 @@ const CouponDetail = () => {
           <h1 className="text-3xl  font-heading text-green-500">
             Coupon Details
           </h1>
-          <p className="mt-2 text-lg font-body font-body text-gray-500">
+          <p className="mt-2 text-lg 
+          font-body text-gray-500">
             An overview of the coupon's information and usage statistics.
           </p>
         </div>

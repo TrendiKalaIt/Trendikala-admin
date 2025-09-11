@@ -2,7 +2,9 @@ const Product = require("../models/Product");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
 const Log = require("../models/Log");
-const slugify = require("slugify"); 
+const slugify = require("slugify");
+import { Helmet } from 'react-helmet-async';
+
 
 const uploadFromBuffer = (buffer) => {
   return new Promise((resolve, reject) => {
@@ -132,6 +134,11 @@ exports.addProduct = async (req, res) => {
 
       slug: slugify(productName, { lower: true, strict: true }),
 
+      // ✅ Meta fields
+      metaTitle: req.body.metaTitle || `${productName} | Trendikala`,
+      metaDescription: req.body.metaDescription || "Trendikala - Premium ethnic wear collection for modern women.",
+      metaKeywords: req.body.metaKeywords || "Trendikala, Long Kurti, Short Kurti, Anarkali, Designer Dress",
+
     };
 
     const product = await Product.create(productData);
@@ -160,6 +167,11 @@ exports.editProduct = async (req, res) => {
       details: tryParseJSON(req.body.details),
       materialWashing: tryParseJSON(req.body.materialWashing),
       sizeShape: tryParseJSON(req.body.sizeShape),
+
+      // ✅ Meta fields
+      metaTitle: req.body.metaTitle || (req.body.productName ? `${req.body.productName} | Trendikala` : undefined),
+      metaDescription: req.body.metaDescription || "Trendikala",
+      metaKeywords: req.body.metaKeywords || "Trendikala",
     };
 
 
