@@ -2,7 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const cors = require('cors'); 
+const cors = require('cors');
 const connectDB = require('./config/mongodb');
 const cloudinary = require('./config/cloudinary')
 const orderRoutes = require('./routes/orderRoutes');
@@ -17,6 +17,7 @@ const { protect } = require('./middleware/roleMiddleware');
 const autoLogger = require('./middleware/autoLogger');
 const enquiryRoutes = require('./routes/enquiryRoutes');
 const contactMessageRoutes = require("./routes/contactMessageRoutes");
+const couponRoutes = require("./routes/couponRoutes")
 
 
 
@@ -43,15 +44,16 @@ app.use("/api/auth", authRoutes);
 
 
 // Routes
-app.use("/api/logs",protect, logRoutes);
-app.use('/api/orders',protect,autoLogger, orderRoutes);
-app.use('/api/users',protect,autoLogger, userRoutes);
-app.use('/api/products',protect,autoLogger, productRoutes);
-app.use('/api/categories',protect,autoLogger, categoryRoutes);
-app.use('/api/dashboard',protect,autoLogger, dashboardRoutes);
-app.use('/api/admins',protect,autoLogger, adminRoutes);
+app.use("/api/logs", protect, logRoutes);
+app.use('/api/orders', protect, autoLogger, orderRoutes);
+app.use('/api/users', protect, autoLogger, userRoutes);
+app.use('/api/products', protect, autoLogger, productRoutes);
+app.use('/api/categories', protect, autoLogger, categoryRoutes);
+app.use('/api/dashboard', protect, autoLogger, dashboardRoutes);
+app.use('/api/admins', protect, autoLogger, adminRoutes);
 app.use('/api/enquiries', enquiryRoutes);
 app.use("/api/contact-messages", contactMessageRoutes);
+app.use("/api/coupons", couponRoutes)
 
 
 // Start server
