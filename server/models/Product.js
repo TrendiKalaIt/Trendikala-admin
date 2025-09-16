@@ -70,22 +70,21 @@ const productSchema = new mongoose.Schema({
 
 
 // 🔹 Slug auto-generate/update before save
-productSchema.pre('save', function (next) {
-  if (this.isModified('productName')) {
-    this.slug = slugify(this.productName, { lower: true, strict: true });
-  }
+// 🔹 Ensure alt tag default even on updateOne/findOneAndUpdate
+productSchema.pre('findOneAndUpdate', function (next) {
+  let update = this.getUpdate();
 
-  // ✅ Ensure every media item has alt
-  if (Array.isArray(this.media)) {
-    this.media.forEach(m => {
-      if (!m.alt) {
-        m.alt = "Trendikala";
-      }
-    });
+  if (update && update.media) {
+    update.media = update.media.map(m => ({
+      ...m,
+      alt: m.alt || "Trendikala"
+    }));
+    this.setUpdate(update);
   }
 
   next();
 });
+
 
 
 productSchema.virtual('isDiscounted').get(function () {
