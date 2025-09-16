@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  console.log('Login attempt:', email);
+
 
   if (!email || !password) {
     console.log('Missing email or password');
@@ -12,7 +12,7 @@ exports.login = async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    console.log('User found:', user);
+   
 
     if (!user) {
       console.log('User not found');
@@ -20,7 +20,7 @@ exports.login = async (req, res) => {
     }
 
     const isMatch = await user.matchPassword(password);
-    console.log('Password match:', isMatch);
+    console.log('Password match:');
 
     if (!isMatch) {
       console.log('Password incorrect');

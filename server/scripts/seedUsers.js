@@ -25,24 +25,6 @@ const users = [
   },
 ];
 
-const seedUsers = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log(' Connected to MongoDB');
 
-    
-    await Admin.deleteMany({});
-    console.log('  Deleted existing users');
-
-
-    await Admin.insertMany(users);
-    console.log(' Seed users added');
-
-    process.exit(0);
-  } catch (err) {
-    console.error(' Error seeding users:', err);
-    process.exit(1);
-  }
-};
 
 seedUsers();

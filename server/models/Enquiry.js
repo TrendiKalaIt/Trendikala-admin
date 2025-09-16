@@ -8,6 +8,7 @@ const enquirySchema = new mongoose.Schema({
   message: { type: String, required: true },
   preferredContactMethod: { type: String, enum: ['Email', 'Phone'], default: 'Email' },
   preferredTime: String,
+   image: { type: String, default: null },
   isRead: { type: Boolean, default: false },   
   actionNote: { type: String, default: "" },
   actionDate: { type: Date } 

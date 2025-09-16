@@ -10,6 +10,7 @@ const Enquiry = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
 
+
   const fetchEnquiries = async () => {
     try {
       const { data } = await axios.get(`${API_URL}/api/enquiries`);
@@ -60,7 +61,7 @@ const Enquiry = () => {
           isRead: true,
           actionNote: enquiry.actionNote || "",
           actionDate: new Date(),
-          finalized: true, 
+          finalized: true,
         }
       );
       setEnquiries((prev) =>
@@ -119,20 +120,18 @@ const Enquiry = () => {
               filteredEnquiries.map((enquiry) => (
                 <tr
                   key={enquiry._id}
-                  className={`font-body border-b transition ${
-                    enquiry.isRead ? "bg-white" : "bg-yellow-50"
-                  } hover:bg-gray-100`}
+                  className={`font-body border-b transition ${enquiry.isRead ? "bg-white" : "bg-yellow-50"
+                    } hover:bg-gray-100`}
                 >
                   <td className="p-3">{enquiry.fullName}</td>
                   <td className="p-3">{enquiry.email}</td>
                   <td className="p-3">{enquiry.phone || "—"}</td>
                   <td className="p-3">{enquiry.enquiryType}</td>
                   <td
-                    className={`p-3 font-medium ${
-                      enquiry.preferredContactMethod === "Email"
+                    className={`p-3 font-medium ${enquiry.preferredContactMethod === "Email"
                         ? "text-blue-600"
                         : "text-green-600"
-                    }`}
+                      }`}
                   >
                     {enquiry.preferredContactMethod}
                   </td>
@@ -176,11 +175,10 @@ const Enquiry = () => {
                       onClick={() =>
                         handleToggleStatus(enquiry._id, !enquiry.isRead)
                       }
-                      className={`p-2 rounded ${
-                        enquiry.isRead
+                      className={`p-2 rounded ${enquiry.isRead
                           ? "bg-green-100 text-green-600"
                           : "bg-gray-100 text-gray-600"
-                      } hover:opacity-80`}
+                        } hover:opacity-80`}
                     >
                       {enquiry.isRead ? "✓ Read" : "Mark Read"}
                     </button>
@@ -231,6 +229,17 @@ const Enquiry = () => {
                 <strong>Preferred Contact:</strong>{" "}
                 {selectedEnquiry.preferredContactMethod}
               </p>
+              {/* Image display */}
+              {selectedEnquiry.image && (
+                <div className="mt-3">
+                  <strong>Attached Image:</strong>
+                  <img
+                    src={selectedEnquiry.image}
+                    alt="Enquiry attachment"
+                    className="mt-1 w-full max-h-64 object-contain rounded border"
+                  />
+                </div>
+              )}
 
               <div className="mt-3">
                 <strong>Message:</strong>
@@ -252,7 +261,7 @@ const Enquiry = () => {
                       actionNote: e.target.value,
                     })
                   }
-                  readOnly={!!selectedEnquiry.finalized} 
+                  readOnly={!!selectedEnquiry.finalized}
                 />
                 {selectedEnquiry.actionDate && (
                   <p className="text-sm text-gray-500 mt-2">
@@ -278,11 +287,10 @@ const Enquiry = () => {
               </button>
               <button
                 onClick={() => handleSaveAction(selectedEnquiry)}
-                className={`px-4 py-2 rounded text-white ${
-                  selectedEnquiry.finalized
+                className={`px-4 py-2 rounded text-white ${selectedEnquiry.finalized
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-green-500 hover:bg-green-600"
-                }`}
+                  }`}
                 disabled={!!selectedEnquiry.finalized}
               >
                 Save Action
