@@ -325,6 +325,7 @@ const Orders = () => {
               </p>
               <p>
                 <strong>Address:</strong>{" "}
+                {selectedOrderDetails.shippingInfo?.apartment},{" "}
                 {selectedOrderDetails.shippingInfo?.streetAddress},{" "}
                 {selectedOrderDetails.shippingInfo?.townCity}
               </p>
