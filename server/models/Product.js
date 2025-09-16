@@ -74,6 +74,16 @@ productSchema.pre('save', function (next) {
   if (this.isModified('productName')) {
     this.slug = slugify(this.productName, { lower: true, strict: true });
   }
+
+  // ✅ Ensure every media item has alt
+  if (Array.isArray(this.media)) {
+    this.media.forEach(m => {
+      if (!m.alt) {
+        m.alt = "Trendikala";
+      }
+    });
+  }
+
   next();
 });
 
