@@ -133,10 +133,21 @@ exports.addProduct = async (req, res) => {
 
       slug: slugify(productName, { lower: true, strict: true }),
 
-      // ✅ Meta fields
+      //  Meta fields
+      // existing fields...
       metaTitle: req.body.metaTitle || `${productName} | Trendikala`,
-      metaDescription: req.body.metaDescription || "Trendikala - Premium ethnic wear collection for modern women.",
-      metaKeywords: req.body.metaKeywords || "Trendikala, Long Kurti, Short Kurti, Anarkali, Designer Dress",
+      metaDescription: req.body.metaDescription || "Trendikala",
+      metaKeywords: req.body.metaKeywords || "Trendikala",
+      canonicalUrl: req.body.canonicalUrl || "Trendikala",
+
+      ogTitle: req.body.ogTitle || productName || "Trendikala",
+      ogDescription: req.body.ogDescription || "Trendikala",
+      ogUrl: req.body.ogUrl || "Trendikala",
+      ogImages: req.body.ogImages ? tryParseJSON(req.body.ogImages) : ["Trendikala"],
+
+      twitterTitle: req.body.twitterTitle || productName || "Trendikala",
+      twitterDescription: req.body.twitterDescription || "Trendikala",
+      twitterImages: req.body.twitterImages ? tryParseJSON(req.body.twitterImages) : ["Trendikala"],
 
     };
 
@@ -167,10 +178,20 @@ exports.editProduct = async (req, res) => {
       materialWashing: tryParseJSON(req.body.materialWashing),
       sizeShape: tryParseJSON(req.body.sizeShape),
 
-      // ✅ Meta fields
+      //  Meta fields
       metaTitle: req.body.metaTitle || (req.body.productName ? `${req.body.productName} | Trendikala` : undefined),
       metaDescription: req.body.metaDescription || "Trendikala",
       metaKeywords: req.body.metaKeywords || "Trendikala",
+      canonicalUrl: req.body.canonicalUrl || "Trendikala",
+
+      ogTitle: req.body.ogTitle || req.body.productName || "Trendikala",
+      ogDescription: req.body.ogDescription || "Trendikala",
+      ogUrl: req.body.ogUrl || "Trendikala",
+      ogImages: req.body.ogImages ? tryParseJSON(req.body.ogImages) : ["Trendikala"],
+
+      twitterTitle: req.body.twitterTitle || req.body.productName || "Trendikala",
+      twitterDescription: req.body.twitterDescription || "Trendikala",
+      twitterImages: req.body.twitterImages ? tryParseJSON(req.body.twitterImages) : ["Trendikala"],
     };
 
 

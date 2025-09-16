@@ -4,6 +4,7 @@ const slugify = require('slugify');
 const mediaSchema = new mongoose.Schema({
   type: { type: String, enum: ['image', 'video'], required: true },
   url: { type: String, required: true },
+  alt: { type: String, default: "Trendikala" }
 }, { _id: false });
 
 const productSchema = new mongoose.Schema({
@@ -45,9 +46,24 @@ const productSchema = new mongoose.Schema({
   materialWashing: [{ label: String, value: String }],
   sizeShape: [{ label: String, value: String }],
 
+
+  // 🔹 SEO fields
   metaTitle: { type: String, default: function () { return `${this.productName || 'Trendikala'} | Trendikala`; } },
   metaDescription: { type: String, default: "Trendikala" },
   metaKeywords: { type: String, default: "Trendikala" },
+  canonicalUrl: { type: String, default: "Trendikala" },
+
+  // Open Graph (Social SEO)
+  ogTitle: { type: String, default: "Trendikala" },
+  ogDescription: { type: String, default: "Trendikala" },
+  ogUrl: { type: String, default: "Trendikala" },
+  ogImages: { type: [String], default: ["Trendikala"] },
+
+  // Twitter Card
+  twitterTitle: { type: String, default: "Trendikala" },
+  twitterDescription: { type: String, default: "Trendikala" },
+  twitterImages: { type: [String], default: ["Trendikala"] }
+
 
 
 }, { timestamps: true });
