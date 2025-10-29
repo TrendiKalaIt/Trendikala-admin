@@ -5,18 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { Eye, EyeOff } from "lucide-react";
 import logo from "../assets/images/trendikala_logo_bg.jpeg";
- 
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // ✅ new state
 
   const navigate = useNavigate();
   const { setUser } = useUser();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true); // ✅ start loading
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
@@ -36,6 +37,8 @@ const LoginPage = () => {
       }
     } catch (err) {
       toast.error("Invalid credentials");
+    } finally {
+      setIsLoading(false); // ✅ stop loading after response
     }
   };
 
@@ -43,13 +46,9 @@ const LoginPage = () => {
     <div className="h-screen flex justify-center items-center bg-[#93A87E]">
       <div className="bg-white flex rounded-2xl shadow-lg w-[700px] overflow-hidden border-t-8 border-[#49951C]">
         
-        {/* LEFT SIDE - Logo & Line */}
+        {/* LEFT SIDE - Logo */}
         <div className="flex flex-col justify-center items-center bg-[#f9f9f9] p-6 w-1/3">
-          <img
-          src={logo} 
-            alt="Logo"
-            className="w-56 h-42 "
-          />
+          <img src={logo} alt="Logo" className="w-56 h-42" />
           <div className="w-full border-r border-gray-300"></div>
         </div>
 
@@ -83,11 +82,17 @@ const LoginPage = () => {
             </div>
           </div>
 
+          {/* ✅ Disable button when loading */}
           <button
             type="submit"
-            className="font-heading w-full bg-[#49951C] hover:bg-[#3b7c18] text-white font-semibold py-3 rounded-md transition duration-300"
+            disabled={isLoading}
+            className={`font-heading w-full  py-3 rounded-md transition duration-300 ${
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-[#49951C] hover:bg-[#3b7c18] text-white"
+            }`}
           >
-            Login
+            {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
       </div>
