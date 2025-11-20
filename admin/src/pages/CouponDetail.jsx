@@ -99,10 +99,10 @@ const CouponDetail = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 md:px-8">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gray-100 ">
+      <div className=" mx-auto">
         {/* Title */}
-        <div className="text-center mb-10">
+        <div className="text-center mb-10 pt-5">
           <h1 className="text-3xl  font-heading text-green-500">
             Coupon Details
           </h1>
@@ -113,7 +113,7 @@ const CouponDetail = () => {
         </div>
 
         {/* Coupon Info */}
-        <div className="bg-white p-6 md:p-8 rounded-xl  mb-10 border border-gray-200">
+        <div className="bg-white p-6 md:p-8    ">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Code */}
             <div className="flex items-center space-x-4">
@@ -211,11 +211,92 @@ const CouponDetail = () => {
                 </p>
               </div>
             </div>
+
+            {/* Scope */}
+            <div className="flex items-center space-x-4">
+              <div className="p-3 bg-blue-100 text-blue-600 rounded-full">
+                <Tag size={20} />
+              </div>
+              <div>
+                <p className="text-sm font-body text-gray-500">Scope</p>
+                <p className="text-lg font-body font-semibold text-gray-800 capitalize">
+                  {coupon.scope === "product" ? "Specific Product" : "Cart Total"}
+                </p>
+              </div>
+            </div>
+
+            {/* Applicable Product */}
+            {coupon.scope === "product" && (
+              <div className="flex items-center space-x-4">
+                <div className="p-3 bg-indigo-100 text-indigo-600 rounded-full">
+                  <Code size={20} />
+                </div>
+                <div>
+                  <p className="text-sm font-body text-gray-500">Applicable Product</p>
+                  <p className="text-lg font-body font-semibold text-gray-800">
+                    {coupon.applicable_product?.productName || "N/A"}
+                  </p>
+                  {coupon.applicable_product?.productCode && (
+                    <p className="text-md font-body text-gray-500">
+                      Code: {coupon.applicable_product.productCode}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
+
+          {/* Slab Details */}
+          {coupon.slabs && coupon.slabs.length > 0 && (
+            <div className="mt-8 border-t pt-6">
+              <h3 className="text-xl font-heading font-semibold text-green-500 mb-4">
+                Price Slabs
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {coupon.slabs.map((slab, index) => (
+                  <div
+                    key={index}
+                    className="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-2"
+                  >
+                    <p className="text-lg font-body font-semibold text-gray-800">
+                      {slab.name || `Slab ${index + 1}`}
+                    </p>
+                    <p className="text-md font-body text-gray-600">
+                      Amount Range: 
+                      <span className="font-medium">
+                        
+                        ₹{slab.min_amount ?? 0} -
+                        {slab.max_amount === null || slab.max_amount === undefined
+                          ? " and above"
+                          : ` ₹${slab.max_amount}`}
+                      </span>
+                    </p>
+                    {slab.min_items > 0 && (
+                      <p className="text-md font-body text-gray-600">
+                        Min Items Required: {slab.min_items}
+                      </p>
+                    )}
+                    <p className="text-md font-body text-gray-600">
+                      Discount: 
+                      {slab.discount_type === "percentage"
+                        ? ` ${slab.discount_value || 0}%`
+                        : ` ₹${slab.discount_value || 0}`}
+                    </p>
+                    <p className="text-md font-body text-gray-600">
+                      Free Delivery: 
+                      <span className="font-semibold">
+                        {slab.free_delivery ? "Yes" : "No"}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Used By Users */}
-        <div className="bg-white  md:p-8 rounded-xl  border border-gray-200">
+        <div className="bg-white p-6 ">
           <h3 className="text-2xl font-bold font-heading text-green-500 mb-4">
             Users Who Used This Coupon
           </h3>
